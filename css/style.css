@@ -1,0 +1,209 @@
+
+* { box-sizing: border-box; }
+
+*:focus {
+    outline: none;
+}
+
+a {
+    color: #000000;
+}
+
+a:hover,
+a:link,
+a:active {
+    color: #000000;
+}
+
+#app {
+    padding-top: 0px;
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 991px ) {
+    .head-row {
+        padding-left: 90px;
+    }
+
+}
+
+/* ----------- TITLE ------------ */
+
+.title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 50px;
+}
+
+.title-button {
+    background-color: yellow;
+    border-radius: 50px;
+    margin: 10px;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    text-align: center;
+    line-height: 60px;
+    text-decoration: none;
+    color: #000000;
+}
+
+.title-button:hover {
+    text-decoration: none;
+    color: #000000;
+}
+
+/* ---------------- GRID ---------------- */
+
+.grid {
+    max-width: 100%;
+}
+
+
+.grid:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+/* Die Kacheln wurden in das separate File "tile.css" verschoben. */
+
+/* -------------- Page MENU ----------- */
+.page-menu{
+    width: 400px;
+    background-color: #fbff00;
+    position: fixed;
+    height: 100%;
+    padding: 10px;
+    padding-top: 90px;
+    padding-left: 25px;
+    left: -400px;
+    z-index: 12;
+    overflow: auto;
+}
+
+.page-menu-button {
+    width: 100px;
+    left:20px;
+    top: 20px;
+    position: fixed;
+    z-index:13;
+}
+
+.page-menu-title {
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 900;
+    padding-bottom: 20px;
+    color: #444444;
+}
+
+.page-menu-list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 10px;
+}
+
+.page-menu-list-item:link,
+.page-menu-list-item:active,
+.page-menu-list-item:visited,
+    .page-menu-list-item {
+    width: 100%;
+    padding: 5px;
+    vertical-align: middle;
+    color: #000000;
+}
+
+.page-menu-list-item:hover {
+    width: 100%;
+    background-color: #cccf1f;
+    border-radius: 10px;
+    vertical-align: middle;
+    color: #000000;
+    text-decoration: none;
+}
+
+.page-menu-link {
+    width:100%;
+    height:40px;
+    padding: 3px;
+    padding-left: 8px;
+}
+
+.page-menu-link span {
+    color: #666666;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.page-menu-link:hover {
+    background-color: #b6b901;
+    width:100%;
+    height:40px;
+    border-radius: 5px;
+}
+
+.page-menu-overlay {
+    width: 0%;
+    position: fixed;
+    height: 0%;
+    z-index:9;
+}
+
+.page-menu-overlay--set {
+    width: 100%;
+    position: fixed;
+    height: 100%;
+    left: 400px;
+    z-index:9;
+}
+
+/* ----------------- ADD TILE ---------------*/
+
+.add-tile-section {
+    background-color: gainsboro;
+    width: 100%;
+    height: 80%;
+    padding: 20px;
+    margin-bottom:20px;
+    margin-top: 10px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    -moz-box-shadow-bottom:    inset 0 0 15px #000000;
+    -webkit-box-shadow: inset 0 0 15px #000000;
+    box-shadow:         inset 0 0 15px #000000;
+}
+
+.add-tile-column {
+    width: 25%;
+    height: 70vh;
+    flex: 0 0 auto;
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 991px ) {
+    .add-tile-column {
+        width: 75%;
+    }
+
+}
+
+.slideDown-down-enter-active, .slideDown-leave-active {
+    transition: height .5s;
+  }
+  .slideDown-enter, .slideDown-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    height: 0px;
+  }
+
+
+
+.annotationLayer {
+    color: #000000;
+    z-index: 9;
+}

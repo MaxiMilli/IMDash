@@ -1,7 +1,7 @@
 Vue.component('presentation-view', {
     data: function () {
         return {
-            url: './upload/Intro_IM_V_HS2018.pdf',
+            url: '',
             loading: false, // TODO: loading zum laufen bringen.
             fullscreenIsActive: false,
             renderPages: false,
@@ -23,55 +23,7 @@ Vue.component('presentation-view', {
     mounted: function () {
         // Close Modal, wenn nicht schon vorher geschehen.
         this.$root.viewModal = false;
-        // Get PDF-object
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
-        // Speichere das PDF-Objekt
-        pdfjsLib.getDocument(this.url).then((pdf) => {this.pdf.pdfObject = pdf;});
-
-        pdfjsLib.getDocument(this.url).promise.then(function(pdf) {
-            //Loope alle Seiten
-            for (var pageCount = 0; pageCount < pdf.numPages; pageCount++) {
-                pdf.getPage(pageCount + 1).then(function(page) {        
-                    var scale = 1;
-                    var viewport = page.getViewport(scale);
-
-                    /*page.getTextContent().then(function (textdata) {
-
-                        //console.log(textdata);
-                    });*/
-
-                    var canvas = document.getElementById('page-' + page.pageNumber);
-                    var context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-                    // Render PDF page into canvas context
-                    var renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-                    var renderTask = page.render(renderContext);
-                    renderTask.then(function () {                        
-                        /*page.getAnnotations().then(function(annotationsData) {
-
-                            if (annotationsData.length != 0) {
-                                annotationsData.forEach(element => {
-                                    if(element.subtype == "Link"){
-                                        $('#ann-page-' + page.pageNumber).append("asdf")
-                                    }
-                                });
-                            }
-                            
-                        });*/
-                    });
-
-                }, function (data) {
-                    console.log(data);
-                });
-            }
-        }, function (reason) {
-            // PDF loading error
-            console.error(reason);
-        });
+        this.getDocument()
         this.getNotes();
     },
     methods: {
@@ -116,6 +68,17 @@ Vue.component('presentation-view', {
                 console.log(error);
             });
         },
+        getDocument: function () {
+            axios.get(this.getAPIURL() + '/get.php?mode=4&id=' + this.$route.params.id)
+            .then((response) => {
+                this.url = response.data.presentations[0].filePath;
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.log("ERROR - Get Presentation. Message:");
+                console.log(error);
+            });
+        },
         inputNotes: function (e) {
             if (e.keyCode === 13 && !e.shiftKey) {
                 e.preventDefault();
@@ -134,6 +97,55 @@ Vue.component('presentation-view', {
                 console.log("ERROR - Backup Notes. Message:");
                 console.log(error);
             });
+        },
+        renderPDF: function () {
+            // Get PDF-object
+            pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+            pdfjsLib.getDocument(this.url).promise.then(function(pdf) {
+                //Loope alle Seiten
+                for (var pageCount = 0; pageCount < pdf.numPages; pageCount++) {
+                    pdf.getPage(pageCount + 1).then(function(page) {        
+                        var scale = 1;
+                        var viewport = page.getViewport(scale);
+
+                        /*page.getTextContent().then(function (textdata) {
+
+                            //console.log(textdata);
+                        });*/
+
+                        var canvas = document.getElementById('page-' + page.pageNumber);
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        // Render PDF page into canvas context
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        var renderTask = page.render(renderContext);
+                        renderTask.then(function () {                        
+                            /*page.getAnnotations().then(function(annotationsData) {
+
+                                if (annotationsData.length != 0) {
+                                    annotationsData.forEach(element => {
+                                        if(element.subtype == "Link"){
+                                            $('#ann-page-' + page.pageNumber).append("asdf")
+                                        }
+                                    });
+                                }
+                                
+                            });*/
+                        });
+
+                    }, function (data) {
+                        console.log(data);
+                    });
+                }
+            }, function (reason) {
+                // PDF loading error
+                console.error(reason);
+            });
         }
     },
     watch: {
@@ -141,6 +153,11 @@ Vue.component('presentation-view', {
             this.pdf.totalPages = this.pdf.pdfObject.numPages;
             this.renderPages = true;
             //this.scrollPos();
+            this.renderPDF();
+        },
+        url: function () {
+            // Speichere das PDF-Objekt
+            pdfjsLib.getDocument(this.url).then((pdf) => {this.pdf.pdfObject = pdf;});
         }
     },
     template: `
@@ -163,7 +180,19 @@ Vue.component('presentation-view', {
                     </div>
                     <div class="panel-body-pdf">
                         <div class="panel-menu">
-                            <button class="toggleFullscreen" v-on:click="toggleFullscreen"><i class="material-icons">fullscreen</i></button> | Seite {{ pdf.currentPage }} / {{ pdf.totalPages }}
+                            <button class="toggleFullscreen" v-on:click="toggleFullscreen"><i class="material-icons">fullscreen</i></button> | 
+                            Seite {{ pdf.currentPage }} / {{ pdf.totalPages }} | 
+                            <button v-tippy="{ html : '#share-notes'  , interactive : true , placement: 'bottom', theme: 'light' }"><i class="material-icons">share</i></button>
+
+                            <div id="share-notes" x-placement="bottom">
+                                <div class="share-notes-modal">
+                                    <h3> Share Notes</h3>
+                                    <p style="color: black"> Hallo - data binding </p>
+                                    <button>Click</button>
+                                </div>
+                            </div>
+
+
                         </div>
                         <div class="panel-statusbar">
                             <div class="panel-statusbar-progress"></div>
@@ -186,6 +215,9 @@ Vue.component('presentation-view', {
                                             <textarea rows="8" @keydown="inputNotes" class="note-input-text" v-model="noteText" v-focus></textarea>
                                             
                                         </form>
+                                    </div>
+                                    <div class="text-area-preview">
+                                        Testtext
                                     </div>
                                 </div>
                             </div>

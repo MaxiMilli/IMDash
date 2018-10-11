@@ -17,6 +17,7 @@ var app = new Vue({
         viewModalData: {},
         modalID: 5,
         dashboardID: 1,
+        userID: 1,
     },
     methods: {
     }

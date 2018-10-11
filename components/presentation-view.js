@@ -4,9 +4,17 @@ Vue.component('presentation-view', {
             url: './upload/Intro_IM_V_HS2018.pdf',
             loading: false, // TODO: loading zum laufen bringen.
             fullscreenIsActive: false,
-            currentPage: 0,
-            totalPages: 0,
             renderPages: false,
+            pdf: {
+                pdfObject: undefined,
+                totalPages: 0,
+                currentPage: 0
+            },
+            standardNoteText: 'Text mit einem Klick hinzufügen...',
+            currentlyNoteEdit: 0,
+            noteText: '',
+            notesID: 0,
+            notes: {},
         }
     },
     mixins: [
@@ -14,29 +22,32 @@ Vue.component('presentation-view', {
     ],
     mounted: function () {
         this.$root.viewModal = false;
+        // Get PDF-object
         pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+        pdfjsLib.getDocument(this.url).then((pdf) => {this.pdf.pdfObject = pdf;});
+        this.renderPages = true;
         pdfjsLib.getDocument(this.url).promise.then(function(pdf) {
-            console.log('PDF loaded');
+            //console.log('PDF loaded');
+            //console.log(pdf);
             var pageCount;
-            this.loading = false;
-            this.totalPages = pdf.numPages;
-            this.renderPages = true;
             for (pageCount = 0; pageCount < pdf.numPages; pageCount++) {
                 var realPageNumber = pageCount + 1;
                 //console.log('PDF FOR Loop started');
                 //console.log(realPageNumber);
 
-                $('#panel-pdf-view-id').append($('<canvas/>', {'id': 'page-' + realPageNumber, 'class': 'pdf-viewer-page'}));
-                $('#panel-pdf-view-id').append($('<div/>', {'id': 'note-slide-' + realPageNumber, 'class': 'panel-notes-note'}));
+                ///$('#panel-pdf-view-id').append($('<canvas/>', {'id': 'page-' + realPageNumber, 'class': 'pdf-viewer-page'}));
+                //$('#panel-pdf-view-id').append($('<div/>', {'id': 'note-slide-' + realPageNumber, 'class': 'panel-notes-note'}));
 
                 pdf.getPage(realPageNumber).then(function(page) {   
                     //console.log('PDF page ' + page.pageNumber + ' rendered');         
                     var scale = 1;
                     var viewport = page.getViewport(scale);
-
-                    var stdValueNotes = "Text mit einem Klick hinzufügen...";
                     
-                    $('#note-slide-' + page.pageNumber).html('<p>Seite ' + page.pageNumber + '</p><div v-on:click="openNotesForm" class="text-area" id="note-page-' + page.pageNumber + '" pageID="' + page.pageNumber + '">' + stdValueNotes + '</div>');
+                    page.getTextContent().then(function (textdata) {
+
+                        //console.log(textdata);
+                    });
+
                     var canvas = document.getElementById('page-' + page.pageNumber);
                     var context = canvas.getContext('2d');
                     canvas.height = viewport.height;
@@ -63,59 +74,58 @@ Vue.component('presentation-view', {
                             
                         });*/
                         this.loading = false;
+                    }).then(function(error) {
+                        console.log(error);
                     });
+
+                }, function (data) {
+                    console.log("asdf");
+                    console.log(data);
                 }).then(function (reason) {
-                    $('.pages').text("Seite 1/" + pdf.numPages);
+                    console.log(reason);
                 });
             }
         }, function (reason) {
             // PDF loading error
             console.error(reason);
         });
+        this.getNotes();
     },
     methods: {
         toggleAddTile: function () {
             this.viewFunctions.addTile = !this.viewFunctions.addTile;
         },
         toggleFullscreen: function () {
-            //console.log($('body .panel-body-pdf'));
-            //console.log($('.panel-body-pdf'));
             if (this.fullscreenIsActive == false) {
                 this.fullscreenIsActive = true;
-                $('body').prepend($('.panel-body'));
+                $('body').prepend($('.panel-body-pdf'));
                 $('.panel-body-pdf').addClass('fullscreen');
+                $('#panel-pdf-view-id').addClass('panel-pdf-view-id--fullscreen');
             } else {
                 this.fullscreenIsActive = false;
-                $('.panel-head').after($('.panel-body'));
+                $('.panel-head').after($('.panel-body-pdf'));
                 $('.panel-body-pdf').removeClass('fullscreen');
+                $('#panel-pdf-view-id').removeClass('panel-pdf-view-id--fullscreen');
             }
         },
         scrollPos: function () {
-            var div = $('.pdf-viewer-page').offset().top - $('#panel-pdf-view-id').offset().top;
+            var div = $('.reihe').offset().top - $('#panel-pdf-view-id').offset().top;
             var progress = (div / $('#panel-pdf-view-id')[0].scrollHeight) * 100;
             $('.panel-statusbar-progress').width(progress * -1 + "%");  
-            
             var $pages = 0;
-            var $totalPages = 0;
-            $('.pdf-viewer-page').each(function (key, element) {
-                //console.log($('#panel-pdf-view-id').scrollTop() + " >= " + ($('.pdf-viewer-page')[key].offsetTop - 10 - $('#panel-pdf-view-id')[0].offsetTop));
-                if ($('#panel-pdf-view-id').scrollTop() >= $('.pdf-viewer-page')[key].offsetTop - 10 - $('#panel-pdf-view-id')[0].offsetTop) {
-                    $pages++;
-                }
-                $totalPages++;
+            $('.reihe').each(function (key, element) {
+                if ($('#panel-pdf-view-id').scrollTop() >= $('.reihe')[key].offsetTop - 10 - $('#panel-pdf-view-id')[0].offsetTop) { $pages++; }
             });
-
-            if (this.currentPage != $pages) {
-                $('.pages').text("Seite " + $pages + "/" + $totalPages);
-
-                this.currentPage = $pages;
-            }
+            if (this.pdf.currentPage != $pages) { this.pdf.currentPage = $pages; }
         },
-        openNotesForm: function (element, page) {
-            console.log($(element));
+        openNotesForm: function (index) {
+            //alert(index);
+            this.currentlyNoteEdit = index;
+
+            this.noteText = this.notes[index];
             //$(element).append('hallo');
         
-            if ($(element).find('#note').length == 0){
+            /*if ($(element).find('#note').length == 0){
                 $('#text-' + page).hide();
                 $form = $('<form id="form-' + page + '" action="#"></form>');
                 $form.append('<input type="text" id="note" value="Notizen">');
@@ -125,7 +135,47 @@ Vue.component('presentation-view', {
                 $('#form-' + page).on('submit', function () {
                     alert("submi!");
                 });
-            }
+            }*/
+        },
+        getNotes: function () {
+            axios.get(this.getAPIURL() + '/get.php?mode=3&id=' + this.$root.dashboardID + '&user=' + this.$root.userID)
+            .then((response) => {
+                console.log(response.data.notes[0].ID)
+                this.notesID = response.data.notes[0].ID;
+                this.notes = JSON.parse(response.data.notes[0].notes);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        inputNotes: function (e) {
+            if (e.keyCode === 13 && !e.shiftKey) {
+                e.preventDefault();
+                this.notes[this.currentlyNoteEdit] = this.noteText;
+                this.currentlyNoteEdit = 0;
+                this.backupNotes();
+              }
+        },
+        backupNotes: function () {
+            const params = new URLSearchParams();
+            params.append('notesID', this.notesID);
+            params.append('notes', JSON.stringify(this.notes));
+            params.append('mode', 2);
+            axios.post(this.getAPIURL() + '/update.php', params)        
+            .then((response) => {
+                //console.log("Notizenupdate Erfolgreich");
+                //console.log(response);
+            })
+            .catch(function (error) {
+                //console.log("Notizenupdate gescheitert");
+                //console.log(error);
+            });
+        }
+    },
+    watch: {
+        'pdf.pdfObject': function () {
+            this.pdf.totalPages = this.pdf.pdfObject.numPages;
+            //this.scrollPos();
         }
     },
     template: `
@@ -148,7 +198,7 @@ Vue.component('presentation-view', {
                     </div>
                     <div class="panel-body-pdf">
                         <div class="panel-menu">
-                            <button class="toggleFullscreen" v-on:click="toggleFullscreen"><i class="material-icons">fullscreen</i></button> | <i class="pages"></i>
+                            <button class="toggleFullscreen" v-on:click="toggleFullscreen"><i class="material-icons">fullscreen</i></button> | Seite {{ pdf.currentPage }} / {{ pdf.totalPages }}
                         </div>
                         <div class="panel-statusbar">
                             <div class="panel-statusbar-progress"></div>
@@ -157,11 +207,22 @@ Vue.component('presentation-view', {
 
                             <div v-if="loading"> lade!</div>
                             
-                            <div class="row" v-for="pageID in totalPages" v-if="renderPages">
+                            <div class="reihe" v-for="pageID in pdf.totalPages" v-if="renderPages">
                             
-                                <canvas id="['page-', pageID]" class="pdf-viewer-page"></canvas>
-                                <div id="['note-slide-', pageID]" class="panel-notes-note"></div>
-                            
+                                <canvas :id="['page-' + pageID]" class="pdf-viewer-page"></canvas>
+                                <div :id="['note-slide-' + pageID]" class="panel-notes-note">
+                                    <h1>Seite {{ pageID }}</h1>
+                                    <div v-on:click="openNotesForm(pageID)" class="text-area-preview" :id="['note-page-' + pageID]" v-if="currentlyNoteEdit !== pageID">
+                                        <p v-if="notes[pageID]">{{ notes[pageID] }}</p>
+                                        <p v-else>{{ standardNoteText }}</p>
+                                    </div>
+                                    <div class="text-area-edit" v-if="currentlyNoteEdit === pageID">
+                                        <form id="notesForm" class="notes-form" action="">
+                                            <textarea rows="8" @keydown="inputNotes" class="note-input-text" v-model="noteText" v-focus></textarea>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

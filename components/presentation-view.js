@@ -21,32 +21,24 @@ Vue.component('presentation-view', {
         mixinAPI
     ],
     mounted: function () {
+        // Close Modal, wenn nicht schon vorher geschehen.
         this.$root.viewModal = false;
         // Get PDF-object
         pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+        // Speichere das PDF-Objekt
         pdfjsLib.getDocument(this.url).then((pdf) => {this.pdf.pdfObject = pdf;});
-        this.renderPages = true;
+
         pdfjsLib.getDocument(this.url).promise.then(function(pdf) {
-            //console.log('PDF loaded');
-            //console.log(pdf);
-            var pageCount;
-            for (pageCount = 0; pageCount < pdf.numPages; pageCount++) {
-                var realPageNumber = pageCount + 1;
-                //console.log('PDF FOR Loop started');
-                //console.log(realPageNumber);
-
-                ///$('#panel-pdf-view-id').append($('<canvas/>', {'id': 'page-' + realPageNumber, 'class': 'pdf-viewer-page'}));
-                //$('#panel-pdf-view-id').append($('<div/>', {'id': 'note-slide-' + realPageNumber, 'class': 'panel-notes-note'}));
-
-                pdf.getPage(realPageNumber).then(function(page) {   
-                    //console.log('PDF page ' + page.pageNumber + ' rendered');         
+            //Loope alle Seiten
+            for (var pageCount = 0; pageCount < pdf.numPages; pageCount++) {
+                pdf.getPage(pageCount + 1).then(function(page) {        
                     var scale = 1;
                     var viewport = page.getViewport(scale);
-                    
-                    page.getTextContent().then(function (textdata) {
+
+                    /*page.getTextContent().then(function (textdata) {
 
                         //console.log(textdata);
-                    });
+                    });*/
 
                     var canvas = document.getElementById('page-' + page.pageNumber);
                     var context = canvas.getContext('2d');
@@ -58,10 +50,7 @@ Vue.component('presentation-view', {
                         viewport: viewport
                     };
                     var renderTask = page.render(renderContext);
-                    //setupAnnotations(page, viewport, canvas, $('.annotationLayer'));
-                    renderTask.then(function () {
-                        //console.log('Page rendered');
-                        
+                    renderTask.then(function () {                        
                         /*page.getAnnotations().then(function(annotationsData) {
 
                             if (annotationsData.length != 0) {
@@ -73,16 +62,10 @@ Vue.component('presentation-view', {
                             }
                             
                         });*/
-                        this.loading = false;
-                    }).then(function(error) {
-                        console.log(error);
                     });
 
                 }, function (data) {
-                    console.log("asdf");
                     console.log(data);
-                }).then(function (reason) {
-                    console.log(reason);
                 });
             }
         }, function (reason) {
@@ -119,32 +102,17 @@ Vue.component('presentation-view', {
             if (this.pdf.currentPage != $pages) { this.pdf.currentPage = $pages; }
         },
         openNotesForm: function (index) {
-            //alert(index);
             this.currentlyNoteEdit = index;
-
             this.noteText = this.notes[index];
-            //$(element).append('hallo');
-        
-            /*if ($(element).find('#note').length == 0){
-                $('#text-' + page).hide();
-                $form = $('<form id="form-' + page + '" action="#"></form>');
-                $form.append('<input type="text" id="note" value="Notizen">');
-                $form.append('<input type="submit" id="saveNote-' + page + '" value="button">');
-                $(element).append($form);
-                $('#note-slide-' + page).unbind('click');
-                $('#form-' + page).on('submit', function () {
-                    alert("submi!");
-                });
-            }*/
         },
         getNotes: function () {
             axios.get(this.getAPIURL() + '/get.php?mode=3&id=' + this.$root.dashboardID + '&user=' + this.$root.userID)
             .then((response) => {
-                console.log(response.data.notes[0].ID)
                 this.notesID = response.data.notes[0].ID;
                 this.notes = JSON.parse(response.data.notes[0].notes);
             })
             .catch(function (error) {
+                console.log("ERROR - Get Notes. Message:");
                 console.log(error);
             });
         },
@@ -161,20 +129,17 @@ Vue.component('presentation-view', {
             params.append('notesID', this.notesID);
             params.append('notes', JSON.stringify(this.notes));
             params.append('mode', 2);
-            axios.post(this.getAPIURL() + '/update.php', params)        
-            .then((response) => {
-                //console.log("Notizenupdate Erfolgreich");
-                //console.log(response);
-            })
+            axios.post(this.getAPIURL() + '/update.php', params)
             .catch(function (error) {
-                //console.log("Notizenupdate gescheitert");
-                //console.log(error);
+                console.log("ERROR - Backup Notes. Message:");
+                console.log(error);
             });
         }
     },
     watch: {
         'pdf.pdfObject': function () {
             this.pdf.totalPages = this.pdf.pdfObject.numPages;
+            this.renderPages = true;
             //this.scrollPos();
         }
     },

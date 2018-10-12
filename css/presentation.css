@@ -98,11 +98,16 @@
     flex-flow: row wrap;
 }
 
+.pdf-page-wrapper {
+    padding: 10px;
+    margin: 10px;
+    padding-top: 0px;
+    width: 68%;
+}
 
 .pdf-viewer-page {
     border: 1px black solid;
-    margin: 10px;
-    width: 63%;
+    width: 100%;
     -webkit-box-shadow: 6px 6px 8px 0px rgba(0,0,0,0.15);
     -moz-box-shadow: 6px 6px 8px 0px rgba(0,0,0,0.15);
     box-shadow: 6px 6px 8px 0px rgba(0,0,0,0.15);
@@ -132,9 +137,6 @@
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 991px ) {
-    .pdf-viewer-page {
-        width: 100%;
-    }
     .panel-notes-note {
         width: 100%;
     }
@@ -152,16 +154,11 @@
     height: 60%;
     display: block;
     padding: 5px;
+    white-space: pre-wrap; 
+    word-wrap: break-word;
+    font-family: inherit;
 }
 
-.text-area-edit {
-    margin: 0 auto;
-    width: 95%;
-    background-color: #ffffe2;
-    height: 60%;
-    display: block;
-    padding: 5px;
-}
 
 .note-input-text {
     background-color: #ffffff;
@@ -201,12 +198,14 @@
     margin: 0;
 }
 
-#share-notes {
-    display: none;
+.share-notes-modal {
+    max-width: 400px;
+    width: 100%;
+    align-content: left;
+    color: #000000;
 }
 
-.share-notes-modal {
-    width: 400px;
+.share-notes-name-dialog {
     align-content: left;
-
+    height: 30vh;
 }

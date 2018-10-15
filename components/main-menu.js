@@ -60,7 +60,7 @@ Vue.component('main-menu', {
             </button>
         </div>
         <div class="page-menu">
-            <center><span class="title">IMDash</span></center><br><br>
+            <center><span class="title" style="padding-left: 0px;">IMDash</span></center><br><br>
             <div class="page-menu-title">Dashboards</div>
             <div class="page-menu-list-container">
                 <a class="page-menu-list-item" href="">
@@ -70,18 +70,18 @@ Vue.component('main-menu', {
             <hr class="page-menu-hr">
             <div class="page-menu-title">Kapitel</div>
             <div class="page-menu-list-container">
-                <a class="page-menu-list-item" href="/presentation/view/1">
-                    Vorlesung
-                </a>
+                <router-link to="/presentation/1" class="page-menu-list-item">
+                    Presentation
+                </router-link>
             </div>
             <div class="page-menu-list-container">
-                <a class="page-menu-list-item" href="/excercise/view/1#">
+                <router-link to="/exercises/1" class="page-menu-list-item">
                     Übungen
-                </a>
+                </router-link>
             </div>
             <hr class="page-menu-hr">
         </div>
-        <div class="page-menu-overlay">
+        <div class="page-menu-overlay" v-on:click="toggleMenu">
             &nbsp;
         </div>
     </div>`

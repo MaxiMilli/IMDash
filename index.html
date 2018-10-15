@@ -11,6 +11,8 @@
         <link rel="stylesheet" href="https://unpkg.com/vue2-animate/dist/vue2-animate.min.css"/>
         <link rel="stylesheet" href="https://unpkg.com/vue-swatches/dist/vue-swatches.min.css">
         <link rel="stylesheet" href="css/external/vue-instant.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/vue-snotify@3.2.1/styles/material.css"/>
+        <link rel="stylesheet" href="css/external/jquery.sweet-modal.min.css" />
         
         <!-- FONTS -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:200,900" rel="stylesheet">
@@ -34,10 +36,10 @@
     <div id="app">
         <main-menu></main-menu>
         <div id="content">
-            <router-view></router-view>
+            <router-view v-if="userDataLoaded"></router-view>
         </div>
-        
-        <modal-component v-if="viewModal" :themadata="viewModalData"></modal-component>
+        <vue-snotify></vue-snotify>
+        <modal-component ref="modal" v-if="viewModal" :themadata="viewModalData"></modal-component>
     </div>
 
 
@@ -58,6 +60,8 @@
     <script src="https://unpkg.com/vue-swatches"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-clickaway@2.2.2/dist/vue-clickaway.min.js"></script>
     <script src="js/external/vue-instant.browser.js"></script>
+    <script src="js/external/jquery.sweet-modal.min.js"></script>
+    <script src="https://unpkg.com/vue-snotify@3.2.1/vue-snotify.min.js"></script>
 
     
     <!-- TEST 
@@ -77,6 +81,6 @@
     <script src="components/modal-component.js"></script>
     <script src="js/store.js"></script>
     <script src="js/router.js"></script>
-    <script src="main.js"></script>
+    <script src="main.js" type="module"></script>
 </body>
 </html>

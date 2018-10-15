@@ -15,7 +15,6 @@ Vue.component('presentation-view', {
             noteset: [],
             /* Für die Suche */
             value: '',
-            suggestionAttribute: 'name',
             suggestions: [],
             selectedEvent: ""
         }
@@ -90,7 +89,8 @@ Vue.component('presentation-view', {
                         visible: Number(currNote.visible),
                         style: {
                             'background-color': '#' + currNote.color
-                        }
+                        },
+                        sendActive: false,
                     });
                 });
                 this.noteset = $notesetToPush;
@@ -101,14 +101,9 @@ Vue.component('presentation-view', {
             });
         },
         getDocument: function () {
-            axios.get(this.getAPIURL() + '/get.php?mode=4&id=' + this.$route.params.id)
-            .then((response) => {
-                this.url = response.data.presentations[0].filePath;
-            })
-            .catch(function (error) {
-                console.log("ERROR - Get Presentation. Message:");
-                console.log(error);
-            });
+            this.getDataPoint('presentations', 'ID', this.$route.params.id).then(function (response) {
+                this.url = response.data[0].filePath;
+            }.bind(this));
         },
         inputNotes: function (e) {
             if (e.keyCode === 13 && !e.shiftKey) {
@@ -121,15 +116,7 @@ Vue.component('presentation-view', {
               }
         },
         backupNotes: function (id) {
-            const params = new URLSearchParams();
-            params.append('notesID', this.noteset[id].notesID);
-            params.append('notes', JSON.stringify(this.noteset[id].data));
-            params.append('mode', 2);
-            axios.post(this.getAPIURL() + '/update.php', params)
-            .catch(function (error) {
-                console.log("ERROR - Backup Notes. Message:");
-                console.log(error);
-            });
+            this.updateDataPoint({notesID: this.noteset[id].notesID, notes: JSON.stringify(this.noteset[id].data), mode: 2});
         },
         renderPDF: function () {
             // Get PDF-object
@@ -181,25 +168,49 @@ Vue.component('presentation-view', {
             });
         },
         changed: function() {
-            var that = this
+            var that = this;
             this.suggestions = []
             axios.get(this.getAPIURL() + '/get.php?mode=5&query=' + this.value)
-                .then(function(response) {
+            .then(function(response) {
+                if (response.data.message == undefined) {
                     response.data.user.forEach(function(a) {
                         that.suggestions.push(a)
                     })
-                }).catch(function (fault) {
-                })
+                } else {
+                    console.log("User nicht vorhanden");
+                }
+            }).catch(function (fault) {
+                console.log(fault);
+            })
         },
-        shareNotes: function() {
+        shareNotes: function(id) { 
             axios.get(this.getAPIURL() + '/get.php?mode=5&query=' + this.value)
             .then(function(response) {
                 console.log(response);
-                if (response.data.message == undefined && value != '') {
-                    alert("gut!");
+                if (response.data.message == undefined) {
+                    this.noteset[id].sendActive = false;
+                    const params = new URLSearchParams();
+                    params.append('mode', 1);
+                    params.append('id', this.$root.userID);
+                    params.append('title', "Notizensatz freigegeben");
+                    params.append('body', "Dir wurde einen Notizensatz freigegeben. Schaue ihn dir doch an!");
+                    params.append('type', "NOTES");
+                    params.append('url', this.$route.path);
+                    axios.post(this.getAPIURL() + '/add.php', params)
+                    .then(function (response) {
+                        console.log(response);
+                        this.$snotify.success('Der Notizensatz wurde an ' + this.value + ' freigegeben.');
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.log("ERROR - Backup Notes. Message:");
+                        console.log(error);
+                        this.$snotify.error('Leider gab es einen Fehler!');
+                    }.bind(this));
                 } else {
                     alert("falsch");
                 }
+            }.bind(this)).catch(function (fault) {
+                console.log(fault);
             })
         }
     },
@@ -234,7 +245,7 @@ Vue.component('presentation-view', {
     <div class="container">
         <div class="row head-row">
             <div class="col-9">
-                <a href="" style="color:#000000;"><span class="title">IMDash ({{ $route.params.id }})</span></a>
+                <a href="" style="color:#000000;"><span class="title">IMDash</span></a>
             </div>
             <div class="col-3">
             </div>
@@ -250,40 +261,42 @@ Vue.component('presentation-view', {
                     </div>
                     <div class="panel-body-pdf">
                         <div class="panel-menu">
-                            <button class="toggleFullscreen" v-on:click="toggleFullscreen"><i class="material-icons">fullscreen</i></button> | 
-                            Seite {{ pdf.currentPage }} / {{ pdf.totalPages }} | 
-                            <button v-tippy="{ html : '#share-notes', reactive : true, interactive : true, placement : 'bottom', theme: 'light', trigger: 'click' }"><i class="material-icons">share</i></button>
+                            <button class="btn btn-light" v-on:click="toggleFullscreen">
+                                <i class="material-icons" v-if="!fullscreenIsActive">fullscreen</i>
+                                <i class="material-icons" v-else>fullscreen_exit</i>
+                            </button>
+                            <button class="btn btn-light" ><i class="material-icons">page</i>Seite {{ pdf.currentPage }} / {{ pdf.totalPages }}<i class="material-icons">page</i> </button>
+                            <button class="btn btn-light" v-tippy="{ html : '#share-notes', reactive : true, interactive : true, placement : 'bottom', theme: 'light', trigger: 'click' }"><i class="material-icons">share</i></button>
 
                             <div id="share-notes" x-placement="bottom">
                                 <div class="share-notes-modal">
                                     <h3> Notizensätze</h3>
-                                    <div v-for="noteSetName in noteset">
+                                    <div v-for="(noteSetName, id) in noteset">
                                         <p>
                                             Set: <b>{{ noteSetName.name }}</b>
-                                            <button v-if="noteSetName.visible === 0" @click="noteSetName.visible = 1">anzeigen</button>
-                                            <button v-else @click="noteSetName.visible = 0">verbergen</button>
-                                            <button v-tippy="{ html : '#sendToUser{{noteSetName.noteID}}', reactive : true, interactive : true, placement : 'bottom', theme: 'light', trigger: 'click' }">Senden</button>
-                                            
+                                            <button class="btn btn-light" v-if="noteSetName.visible === 0" @click="noteSetName.visible = 1">anzeigen</button>
+                                            <button class="btn btn-light" v-else @click="noteSetName.visible = 0">verbergen</button>
+                                            <button class="btn btn-light" @click="noteSetName.sendActive = !noteSetName.sendActive">Senden</button>
+                                            <p v-if="noteSetName.sendActive">
+                                                <vue-instant 
+                                                suggestion-attribute="name" 
+                                                v-model="value" 
+                                                :disabled="false" 
+                                                @input="changed"
+                                                @click-button="shareNotes(id)"
+                                                :show-autocomplete="true"
+                                                :suggestions="suggestions"
+                                                name="customName"
+                                                placeholder="Name eingeben"
+                                                class="searchBoxOpen"
+                                                type="google"></vue-instant>
+                                            </p>
+
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            <div :id="['sendToUser' + noteSetName.noteID]" x-placement="bottom" v-for="noteSetName in noteset">
-                                <div class="share-notes-name-dialog">
-                                        <vue-instant :suggestion-attribute="suggestionAttribute" 
-                                        v-model="value" 
-                                        :disabled="false" 
-                                        @input="changed" 
-                                        @click-button="shareNotes"
-                                        :show-autocomplete="true"
-                                        :autofocus="false" 
-                                        :suggestions="suggestions" 
-                                        name="customName" 
-                                        placeholder="Name eingeben" 
-                                        type="google"></vue-instant>
-                                </div>
-                            </div>
-
+                            
 
                         </div>
                         <div class="panel-statusbar">

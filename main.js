@@ -55,7 +55,7 @@ var app = new Vue({
     },
     watch: {
         userID: function (old, neww) {
-            this.getDataPoint('userDashboard', 'userID', this.userID).then(function (response) {
+            this.getDataPoint('userDashboard', 'userID', this.userID, false).then(function (response) {
                 Object(response.data).forEach(user => {
                     if (user.startup == 1) {
                         this.dashboardID = user.dashboardID;

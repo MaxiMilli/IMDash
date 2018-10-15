@@ -8,7 +8,9 @@ Vue.component('dashboard-view', {
             dashboard: {},
             moveTile: false,
             dashboardLayout: [],
-            notifications: []
+            notifications: [],
+            themenAdd: [],
+            renderThemenAdd: false
         }
     },
     mixins: [
@@ -40,7 +42,16 @@ Vue.component('dashboard-view', {
             console.log(error);
         });
 
-
+        //Get Themen
+        this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
+            response.data.forEach(thema => {
+                thema.hover=false;
+                thema.headstyle = {
+                    backgroundColor: thema.priColor
+                }
+                this.themenAdd.push(thema);
+            });
+        }.bind(this));
     },
     methods: {
         toggleAddTile: function () {
@@ -67,6 +78,14 @@ Vue.component('dashboard-view', {
                 //console.log("Notizenupdate gescheitert");
                 //console.log(error);
             });
+        },
+        addTile: function () {
+            alert("addTile");
+        },
+    },
+    watch: {
+        themenAdd: function () {
+            this.renderThemenAdd = true;
         }
     },
     template: `
@@ -100,14 +119,23 @@ Vue.component('dashboard-view', {
                     <div class="add-tile-section" v-on:scroll="scrollHorizontal">
                         <div class="add-tile-column">
                             <div class="page-menu-title">themen</div>
-                            <div class="tile tile100-preview tile-border--black">
-                                <div class="tile-head">TypeScript</div>
-                                <div class="tile-body">
-                                    <div class="tile-img">
-                                        <img src="../view/img/html5.png">
+                            <div v-for="(thema, id) in themenAdd" v-if="renderThemenAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile">
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
+                                </div>
+                                <div class="tile-overlay" @mouseleave="thema.hover=false" v-if="thema.hover == true" style="background-color:rgba(255,255,255,0.5)">
+                                    <div class="tile-move-handle">
+                                        <i class="material-icons">add</i>
                                     </div>
                                 </div>
-                                <div class="tile-move">move</div>
+                                <div class="tile-head" :style="thema.headstyle">{{thema.name}}</div>
+                                <div class="tile-body">
+                                    <div class="tile-img-prv">
+                                        <img :src="thema.bild">
+                                    </div>
+                                    <div class="tile-buttons">
+                                        <p>Content</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="add-tile-column">

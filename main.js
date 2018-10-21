@@ -8,13 +8,20 @@ Vue.directive('focus', {
     }
 });
 
-Vue.use(Snotify)
+Vue.use(Snotify);
+let layout = window.VueResponsiveGridLayout.VueResponsiveGridLayout;
+let item = window.VueResponsiveGridLayout.VueGridItem;
+let componentMixins = window.VueResponsiveGridLayout.GridItemComponentsMixins;
+
+Vue.component('vue-responsive-grid-layout', layout);
+Vue.component('vue-grid-item', item);
 
 var app = new Vue({
     router,
     el: '#app',
     mixins: [
-        mixinAPI
+        mixinAPI,
+        componentMixins
     ],
     data: {
         message: 'Hello Vue!',

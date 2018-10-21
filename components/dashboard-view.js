@@ -4,17 +4,34 @@ Vue.component('dashboard-view', {
             viewFunctions: {
                 addTile: false,
             },
-            themen: {},
+            themen: { },
             dashboard: {},
-            moveTile: false,
             dashboardLayout: [],
             notifications: [],
             themenAdd: [],
-            renderThemenAdd: false
+            renderThemenAdd: false,
+            screenWidth: window.innerWidth,
+            layouts: {
+                1 : {
+                  "md": [
+                    { x: 0, y: 0, w: 2, h: 8, i: "1"},
+                    { x: 2, y: 0, w: 2, h: 8, i: "2"}
+                  ]
+                }
+              },
+            currentLayoutsId: 1,
+            breakpoint: "md",
+            components: { },
+            cols: 10,
+            breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
+            colsAll: { lg: 10, md: 8, sm: 6, xs: 4, xxs: 2 },
+            isDraggable: false,
+            readyForRender: false
         }
     },
     mixins: [
-        mixinAPI
+        mixinAPI,
+        window.VueResponsiveGridLayout.GridItemComponentsMixins
     ],
     mounted: function () {
         // Get Layout and Presentations
@@ -35,7 +52,7 @@ Vue.component('dashboard-view', {
         // Get Notifications
         axios.get(this.getAPIURL() + '/get.php?mode=6&id=' + this.$root.userID)
         .then((response) => {
-            console.log(response);
+            //console.log(response);
             this.notifications = response.data.notifications;
         })
         .catch(function (error) {
@@ -52,6 +69,9 @@ Vue.component('dashboard-view', {
                 this.themenAdd.push(thema);
             });
         }.bind(this));
+        this.components = { "1": { i: "1", component: "thema-tile", defaultSize: 2},
+        "2": { i: "2", component: "thema-tile", defaultSize: 2}};
+        window.addEventListener("resize", ()=> this.screenWidth = window.innerWidth);
     },
     methods: {
         toggleAddTile: function () {
@@ -82,10 +102,83 @@ Vue.component('dashboard-view', {
         addTile: function () {
             alert("addTile");
         },
+
+
+        readyLayout() {
+        	console.log('layout ready');
+          this.$refs.layout.initLayout();
+        },
+        initLayout({layout, cols}) {
+            this.cols = cols;
+        },
+        initWidth({width}) {
+            this.containerWidth = width;
+        },
+        switchLayout() {
+            switch(this.currentLayoutsId) {
+                case 1:
+                    this.currentLayoutsId = 2;
+                    this.$refs.layout.switchLayout(this.currentLayouts);
+                    break;
+                case 2:
+                    this.currentLayoutsId = 1;
+                    this.$refs.layout.switchLayout(this.currentLayouts);
+                    break;
+            }
+        },
+        onLayoutSwitched() {
+            console.log('layouts switched')
+        },
+        changeWidth({width, newCols}) {
+            this.containerWidth = width;
+            this.cols = newCols;
+        },
+        updateLayout({layout, breakpoint}) {
+            let filtered;
+            filtered = layout.map( (item) => { return { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }})
+            this.layouts[breakpoint] = filtered;
+        },
+        changeBreakpoint({breakpoint, cols}) {
+            this.cols = cols;
+            this.breakpoint = breakpoint;
+        },
+        changeLayout({layout, breakpoint}) {
+            let filtered;
+            filtered = layout.map( (item) => { return { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }})
+            this.layouts[breakpoint] = filtered;
+        },
+        gridMode() {
+            this.$refs.layout.resizeAllItems(false, false);
+        },
+        listMode() {
+            this.$refs.layout.resizeAllItems(true, false);
+        },
+        resizedLayout() {
+            console.log('layout resized')
+        }
     },
     watch: {
+        themen: function () {
+            this.readyForRender = true;
+        },
         themenAdd: function () {
             this.renderThemenAdd = true;
+        },
+        screenWidth: function (old, newWidth) {
+            console.log(newWidth);
+            
+        }
+    },
+    computed: {
+        dashboardCols: function () { 
+            if (this.screenWidth < 900) {
+                return 4;
+            } else {
+                return 6;
+            }
+        },
+        currentLayouts() {
+            return this.layouts[this.currentLayoutsId];
         }
     },
     template: `
@@ -109,7 +202,7 @@ Vue.component('dashboard-view', {
                         </div>
                     </div>
                     <a href="#" class="title-button float-right" v-on:click="toggleAddTile"><i class="material-icons">add</i></a>
-                    <a href="#" class="title-button float-right" v-on:click="moveTile = !moveTile"><i class="material-icons">edit</i></a>
+                    <a href="#" class="title-button float-right" v-on:click="isDraggable = !isDraggable"><i class="material-icons">edit</i></a>
                 </div>
             </div>
         </div>
@@ -163,30 +256,47 @@ Vue.component('dashboard-view', {
                     <div class="overlay">
 
                     </div>
-                    <grid-layout 
-                    :layout="dashboardLayout"
-                    :col-num="6"
-                    :row-height="90"
-                    :is-draggable="moveTile"
-                    :is-resizable="moveTile"
-                    :is-mirrored="false"
-                    :vertical-compact="true"
-                    :margin="[10, 10]"
-                    :use-css-transforms="true"
-                    @layout-updated="layoutUpdatedEvent">
-                        <grid-item v-for="(item, key) in dashboardLayout"
-                        :x="item.x"
-                        :y="item.y"
-                        :w="item.w"
-                        :h="item.h"
-                        :i="item.i">
-                                    <thema-tile
-                                        :data="themen[key]"
-                                        :edit="moveTile"
-                                        :key="item.i"
-                                        ></thema-tile>
-                            </grid-item>
-                    </grid-layout> 
+                    <vue-responsive-grid-layout 
+                    @layout-update="updateLayout" 
+                    @layout-change="changeLayout" 
+                    @layout-switched="onLayoutSwitched" 
+                    @layout-ready="readyLayout" 
+                    @layout-init="initLayout" 
+                    @layout-resized="resizedLayout" 
+                    @width-init="initWidth"
+                    @width-change="changeWidth" 
+                    @breakpoint-change="changeBreakpoint"
+                    :layouts="currentLayouts" 
+                    :cols="cols" 
+                    :compact-type="'vertical'" 
+                    :vertical-compact="true" 
+                    :init-on-start="false" 
+                    :breakpoint="breakpoint" 
+                    :breakpoints="breakpoints" 
+                    :cols-all="colsAll" 
+                    ref="layout">
+                        <template slot-scope="props">
+                            <vue-grid-item 
+                            v-for="(item, keyID) in props.layout"
+                            v-if="readyForRender"
+                            :key="item.i"
+                            :x="item.x"
+                            :y="item.y"
+                            :w="item.w"
+                            :h="item.h"
+                            :i="item.i"
+                            :cols="props.cols"
+                            :container-width="props.containerWidth"
+                            :component="components[item.i].component"
+                            :component-props="{ id : item.i, data: themen[item.i-1], edit: isDraggable}"
+                            :default-size="components[item.i].defaultSize"
+                            :is-draggable="isDraggable"
+                            :is-resizable="isDraggable"
+                            :height-from-children="true"
+                            :can-be-resized-with-all="true">
+                            </vue-grid-item>
+                        </template>
+                    </vue-responsive-grid-layout> 
                     </div>
                 </div>
             </div>

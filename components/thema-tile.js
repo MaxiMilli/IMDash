@@ -20,7 +20,6 @@ Vue.component('thema-tile', {
         //console.log(this.data);
         this.colorPrimary.backgroundColor = this.data.priColor;
         this.colorSecundary.backgroundColor = this.data.secColor;
-        console.log(this.data);
     },  
     methods: {
         openModal: function () {
@@ -34,14 +33,14 @@ Vue.component('thema-tile', {
         },
     },
     template: `
-    <div class="tile tile100 tile-border--black" id="tile-html" :data-item-id="data.ID">
+    <div class="tile tile100 tile-border--black" id="tile-html">
         <div class="tile-move bar" v-show="edit">
             <div class="tile-move-handle">
                 <i class="material-icons">open_with</i>
             </div>
         </div>
         <div class="tile-head" v-bind:style="colorPrimary">
-            {{ data.name }} <a href="#" v-on:click="openModal"><i class="material-icons float-right">arrow_drop_down_circle</i></a>
+            {{ data.name }}<a href="#" v-on:click="openModal"><i class="material-icons float-right">arrow_drop_down_circle</i></a>
         </div>
         <div class="tile-img">
             <img id="thema-title-image" :src="data.bild">

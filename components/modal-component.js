@@ -6,7 +6,7 @@ Vue.component('modal-component', {
             presentationObject: {},
             themaObject: {},
             bgc: {
-                backgroundColor: ''
+                backgroundColor: this.themadata.priColor
             }
         }
     },
@@ -24,13 +24,13 @@ Vue.component('modal-component', {
         <div class="themeModal tile-border--black" id="themeModal">
             <div class="modal-guts">
                 <div class="modal-head" v-bind:style="bgc">
-                    {{ themaObject.name }} <a href="#" v-on:click="closeModal"><i class="material-icons float-right">close</i></a>
+                    {{ themadata.name }} <a href="#" v-on:click="closeModal"><i class="material-icons float-right">close</i></a>
                 </div>
                 <div class="modal-files">
                     <div class="modal-column">
                         <div class="modal-column-head">Vorlesungen</div>
                         <div class="modal-column-list-container">
-                            <router-link v-for="item in themadata.presentations" v-on:click="closeModal" :to="{ path: '/presentation/' + item.ID}">
+                            <router-link class="modal-column-list-item" v-for="item in themadata.presentations" v-on:click="closeModal" :to="{ path: '/presentation/' + item.ID}">
                                 <i class="material-icons">desktop_windows</i> {{ item.fileName }}
                             </router-link>
                             <span v-if="themadata.presentations.length == 0" class="modal-column-list-noentry"><br><br>Keine Präsentationen vorhanden </span>

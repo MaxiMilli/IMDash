@@ -121,6 +121,10 @@
     color: #000000;
 }
 
+.modal-column-list-item i {
+    font-size: 1rem;
+}
+
 .modal-column-list-item:hover {
     width: 100%;
     background-color: rgb(255, 210, 198);

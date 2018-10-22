@@ -11,14 +11,7 @@ Vue.component('dashboard-view', {
             themenAdd: [],
             renderThemenAdd: false,
             screenWidth: window.innerWidth,
-            layouts: {
-                1 : {
-                  "md": [
-                    { x: 0, y: 0, w: 2, h: 8, i: "1"},
-                    { x: 2, y: 0, w: 2, h: 8, i: "2"}
-                  ]
-                }
-              },
+            layouts: { 1 : { } },
             currentLayoutsId: 1,
             breakpoint: "md",
             components: { },
@@ -40,10 +33,26 @@ Vue.component('dashboard-view', {
             this.themen = response.data.themen;
             this.dashboard = response.data.dashboard;
             var obj = JSON.parse(response.data.dashboard.layout);
-            var arrayLength = obj.length;
-            for (var i = 0; i < arrayLength; i++) {
-                this.dashboardLayout.push(obj[i]);
+            if (obj === {}) {
+                console.log("layout neu")
+                var t = 0;
+                for (var them in this.themen) {
+                    this.layouts[1].push({ x: 0, y: (t * this.themen[t].size), w: 2, h: 8, i: String(t+1)});
+                    t++;
+                }
+            } else {
+                console.log("layout aus DB");
+                console.log(obj);
+                this.layouts[1] = obj;
             }
+            var e = 0;
+            for (var them in this.themen) {
+                this.components[e+1] = { i: String(e+1), component: "thema-tile", defaultSize: this.themen[e].size}
+                e++;
+            }
+
+            
+            this.readyForRender = true;
         })
         .catch(function (error) {
             console.log(error);
@@ -69,8 +78,6 @@ Vue.component('dashboard-view', {
                 this.themenAdd.push(thema);
             });
         }.bind(this));
-        this.components = { "1": { i: "1", component: "thema-tile", defaultSize: 2},
-        "2": { i: "2", component: "thema-tile", defaultSize: 2}};
         window.addEventListener("resize", ()=> this.screenWidth = window.innerWidth);
     },
     methods: {
@@ -85,9 +92,10 @@ Vue.component('dashboard-view', {
             e.preventDefault();
         },
         layoutUpdatedEvent: function () {
+            console.log("update");
             const params = new URLSearchParams();
             params.append('id', this.dashboard.ID);
-            params.append('layout', JSON.stringify(this.dashboardLayout));
+            params.append('layout', JSON.stringify(this.layouts[1]));
             params.append('mode', 1);
             axios.post(this.getAPIURL() + '/update.php', params)        
             .then((response) => {
@@ -136,7 +144,8 @@ Vue.component('dashboard-view', {
         updateLayout({layout, breakpoint}) {
             let filtered;
             filtered = layout.map( (item) => { return { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }})
-            this.layouts[breakpoint] = filtered;
+            this.layouts[1][breakpoint] = filtered;
+            this.layoutUpdatedEvent();
         },
         changeBreakpoint({breakpoint, cols}) {
             this.cols = cols;
@@ -158,15 +167,11 @@ Vue.component('dashboard-view', {
         }
     },
     watch: {
-        themen: function () {
-            this.readyForRender = true;
-        },
         themenAdd: function () {
             this.renderThemenAdd = true;
         },
         screenWidth: function (old, newWidth) {
             console.log(newWidth);
-            
         }
     },
     computed: {
@@ -256,14 +261,15 @@ Vue.component('dashboard-view', {
                     <div class="overlay">
 
                     </div>
-                    <vue-responsive-grid-layout 
+                    <vue-responsive-grid-layout
+                    v-if="readyForRender"
+                    @width-init="initWidth"
                     @layout-update="updateLayout" 
                     @layout-change="changeLayout" 
                     @layout-switched="onLayoutSwitched" 
                     @layout-ready="readyLayout" 
                     @layout-init="initLayout" 
                     @layout-resized="resizedLayout" 
-                    @width-init="initWidth"
                     @width-change="changeWidth" 
                     @breakpoint-change="changeBreakpoint"
                     :layouts="currentLayouts" 
@@ -278,7 +284,6 @@ Vue.component('dashboard-view', {
                         <template slot-scope="props">
                             <vue-grid-item 
                             v-for="(item, keyID) in props.layout"
-                            v-if="readyForRender"
                             :key="item.i"
                             :x="item.x"
                             :y="item.y"

@@ -24,7 +24,7 @@ Vue.component('modal-component', {
         <div class="themeModal tile-border--black" id="themeModal">
             <div class="modal-guts">
                 <div class="modal-head" v-bind:style="bgc">
-                    {{ themadata.name }} <a href="#" v-on:click="closeModal"><i class="material-icons float-right">close</i></a>
+                    {{ themadata.name }} <a href="#" v-on:click="closeModal" class="color-white"><i class="material-icons float-right">close</i></a>
                 </div>
                 <div class="modal-files">
                     <div class="modal-column">

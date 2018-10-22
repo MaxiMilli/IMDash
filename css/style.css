@@ -19,6 +19,10 @@ a:active {
     padding-top: 0px;
 }
 
+.color-white {
+    color: #ffffff;
+}
+
 /* MEDIA QUERIES */
 @media screen and (max-width: 991px ) {
     .head-row {

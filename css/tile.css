@@ -126,7 +126,7 @@ BODY:       tile-body
     width: 100%;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    height: 50px;
+    min-height: 50px;
     padding: -20px;
 
     background-color: rgb(168, 168, 168);
@@ -213,7 +213,9 @@ BODY:       tile-body
 .tile-button-link {
     background-color: rgb(212, 212, 212);
     width: 33.3%;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     left: 0%;
     height: 50%;
     border: #ffffff solid 1px;
@@ -229,10 +231,7 @@ BODY:       tile-body
 }
 
 .tile-button-link-icon {
-    line-height: 100px;
     width:100%;
-    font-size: 2.5vw;
-    display: block;
 }
 
 .tile-b-l-radius {

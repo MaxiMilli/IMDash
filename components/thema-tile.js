@@ -25,6 +25,9 @@ Vue.component('thema-tile', {
         openModal: function () {
             this.$root.viewModal = true;
             this.$root.viewModalData = this.data;
+        },
+        deleteTile: function () {
+            this.$emit('delete-tile', this.data.ID);
         }
     },
     watch: {
@@ -38,9 +41,10 @@ Vue.component('thema-tile', {
             <div class="tile-move-handle">
                 <i class="material-icons">open_with</i>
             </div>
+            <button class="btn btn-danger" style="top: 0; left: 0; position: absolute;" v-on:click="deleteTile">Entfernen</button>
         </div>
         <div class="tile-head" v-bind:style="colorPrimary">
-            {{ data.name }}<a href="#" v-on:click="openModal"><i class="material-icons float-right">arrow_drop_down_circle</i></a>
+            {{ data.name }}<a href="#" v-on:click="openModal" class="color-white"><i class="material-icons float-right">arrow_drop_down_circle</i></a>
         </div>
         <div class="tile-img">
             <img id="thema-title-image" :src="data.bild">

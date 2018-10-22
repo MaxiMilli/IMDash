@@ -1,5 +1,3 @@
-
-
 Vue.component('thema-tile', {
     inheritAttrs: false,
     props: ['data', 'edit'],
@@ -32,7 +30,7 @@ Vue.component('thema-tile', {
     },
     watch: {
         'edit': function () {
-            console.log("edit changed");
+            
         },
     },
     template: `

@@ -24,7 +24,9 @@ Vue.component('dashboard-view', {
         // Get Layout and Presentations
         axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
         .then((response) => {
+            // map themen
             this.themen = response.data.themen;
+            // map layout
             if (response.data.dashboard.layout == ''){
                 var obj = {};
             } else {
@@ -48,7 +50,7 @@ Vue.component('dashboard-view', {
                 this.components[this.themen[e].ID] = { i: this.themen[e].ID, component: "thema-tile", defaultSize: this.themen[e].size};
                 e++;
             }
-            // Alle Daten gefüllt, rendere das Layout
+            // Alle Daten gefüllt, rendere Layout
             this.readyForRender = true;
         })
         .catch(function (error) {
@@ -85,14 +87,13 @@ Vue.component('dashboard-view', {
             e.preventDefault();
         },
         layoutUpdatedEvent: function () {
-            console.log("update");
             const params = new URLSearchParams();
             params.append('id', this.$root.dashboardID);
             params.append('layout', JSON.stringify(this.layouts));
             params.append('mode', 1);
             axios.post(this.getAPIURL() + '/update.php', params)        
             .then((response) => {
-                console.log("Layoutupdate erfolgreich");
+                //console.log("Layoutupdate erfolgreich");
                 //console.log(response);
             })
             .catch(function (error) {
@@ -102,21 +103,21 @@ Vue.component('dashboard-view', {
         },
         addTile: function (id, themenAddID) {
             if (this.checkIfThemaExists(id)){
-                alert("thema exists");
+                this.$snotify.warning('Diese Lektion hast du schon hinzugefügt.');
             } else {
                 this.readyForRender = false;
                 var height = 0;
-                //console.log(this.layouts[this.breakpoint]);
+
                 for (var tile in this.layouts[this.breakpoint]) {
-                    console.log(this.layouts[this.breakpoint][tile]);
                     var tempHeight = this.layouts[this.breakpoint][tile].y + this.layouts[this.breakpoint][tile].h;
                     if (height < tempHeight) {
                         height = tempHeight;
                     }
                 }
-
+                this.layouts[this.breakpoint].push({ x: 0, y: height, w: 2, h: 8, i: id});
+                
                 // themen füllen
-                this.themen.push(this.themenAdd[themenAddID]);
+                //this.themen.push(this.themenAdd[themenAddID]);
                 //dB
                 const params = new URLSearchParams();
                 params.append('mode', 2);
@@ -124,7 +125,14 @@ Vue.component('dashboard-view', {
                 params.append('thema', id);
                 axios.post(this.getAPIURL() + '/add.php', params)
                 .then(function (response) {
-                    console.log(response);
+                    axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
+                    .then((response) => {
+                        // map themen
+                        this.themen = response.data.themen;
+                        this.readyForRender = true;
+                        
+                        this.layoutUpdatedEvent();
+                    })
                 }.bind(this))
                 .catch(function (error) {
                     console.log("ERROR - Add thema. Message:");
@@ -132,10 +140,8 @@ Vue.component('dashboard-view', {
                     this.$snotify.error('Leider gab es einen Fehler!');
                 }.bind(this));
 
-
-                this.components[id] = { i: id, component: "thema-tile", defaultSize: 2};
-                this.layouts[this.breakpoint].push({ x: 0, y: height, w: 2, h: 8, i: id});
-                this.readyForRender = true;
+                this.components[id] = { i: id, component: "thema-tile", defaultSize: this.themenAdd[themenAddID].size};
+                this.addTileWindow = false;
             }
         },
         deleteTile: function (id) {
@@ -182,11 +188,8 @@ Vue.component('dashboard-view', {
                 this.$snotify.error('Leider gab es einen Fehler!');
             }.bind(this));
             this.layoutUpdatedEvent();
-
-            console.log("Erfolgreich gelöscht");
         },  
         readyLayout() {
-        	console.log('layout ready');
           this.$refs.layout.initLayout();
         },
         initLayout({layout, cols}) {
@@ -224,7 +227,6 @@ Vue.component('dashboard-view', {
             this.$refs.layout.resizeAllItems(true, false);
         },
         resizedLayout() {
-            console.log('layout resized')
         },
         checkIfThemaExists(id) {
             var exists = false;
@@ -234,6 +236,13 @@ Vue.component('dashboard-view', {
                 }
             }
             return exists;
+        },
+        getThemaData: function (id) {
+            for (var them in this.themen) {
+                if (this.themen[them].ID == id) {
+                    return this.themen[them];
+                }
+            }
         }
     },
     watch: {
@@ -242,7 +251,7 @@ Vue.component('dashboard-view', {
         }
     },
     computed: {
-
+        
     },
     template: `
     <div class="dashboard-view">
@@ -362,7 +371,7 @@ Vue.component('dashboard-view', {
                             :can-be-resized-with-all="true">
                                 <thema-tile
                                     :id="item.i"
-                                    :data="themen[keyID]"
+                                    :data="getThemaData(item.i)"
                                     :edit="isDraggable"
                                     @delete-tile="deleteTile">
                                 </thema-tile>

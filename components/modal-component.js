@@ -39,22 +39,10 @@ Vue.component('modal-component', {
                     <div class="modal-column">
                         <div class="modal-column-head">Übungen</div>
                         <div class="modal-column-list-container">
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
-                            <div class="modal-column-list-item"><i class="material-icons">code</i> Test1</div>
+                            <router-link class="modal-column-list-item" v-for="item in themadata.exercise" v-on:click="closeModal" :to="{ path: '/exercises/' + item.ID}">
+                                <i class="material-icons">code</i> {{ item.name }}
+                            </router-link>
+                            <span v-if="themadata.exercise.length == 0" class="modal-column-list-noentry"><br><br>Keine Übungen vorhanden </span>
                         </div>
                     </div>
                     <div class="modal-column">
@@ -62,17 +50,21 @@ Vue.component('modal-component', {
                         <hr width="70%" align="left">
                         <div class="modal-column-head">Aufzeichnungen</div>
                         <div class="modal-column-list-container">
-                            <div class="modal-column-list-item"><i class="material-icons">ondemand_video</i> Aufzeichnung</div>
-                            <div class="modal-column-list-item"><i class="material-icons">ondemand_video</i> Aufzeichnung</div>
-                            <div class="modal-column-list-item"><i class="material-icons">ondemand_video</i> Aufzeichnung</div>
+                            <router-link class="modal-column-list-item" v-for="item in themadata.stream" v-on:click="closeModal" :to="{ path: '/stream/' + item.ID}">
+                                <i class="material-icons">code</i> {{ item.name }}
+                            </router-link>
+                            <span v-if="themadata.stream.length == 0" class="modal-column-list-noentry"><br><br>Keine Streams vorhanden </span>
                         </div>
                     </div>
                     <div class="modal-column">
                         <div class="modal-column-head">Dokumente</div>
                         <div class="modal-column-list-container">
-                            <div class="modal-column-list-item"><i class="material-icons">insert_drive_file</i> Dokument</div>
-                            <div class="modal-column-list-item"><i class="material-icons">insert_drive_file</i> Dokument</div>
-                            <div class="modal-column-list-item"><i class="material-icons">insert_drive_file</i> Dokument</div>
+                            <div class="modal-column-list-item" v-for="item in themadata.file">
+                                <a :href="item.link" download>
+                                    <i class="material-icons">insert_drive_file</i> {{ item.name }}
+                                </a>
+                            </div>
+                            <span v-if="themadata.file.length == 0" class="modal-column-list-noentry"><br><br>Keine Dateien vorhanden </span>
                         </div>
                     </div>
                 </div>

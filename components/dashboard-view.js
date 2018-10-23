@@ -1,19 +1,21 @@
 Vue.component('dashboard-view', {
     data: function () {
         return {
-            addTileWindow: false,
-            themen: { },
+            dashboardName: 'Name',
             notifications: [],
-            themenAdd: [],
-            renderThemenAdd: false,
+            themen: { },
             layouts: { },
-            breakpoint: "md",
             components: { },
             cols: 10,
+            breakpoint: "md",
             breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
             colsAll: { lg: 10, md: 8, sm: 6, xs: 4, xxs: 2 },
+            themenAdd: [],
+            renderThemenAdd: false,
+            addTileWindow: false,
             isDraggable: false,
-            readyForRender: false
+            readyForRender: false,
+            editDashboardName: false,
         }
     },
     mixins: [
@@ -24,6 +26,7 @@ Vue.component('dashboard-view', {
         // Get Layout and Presentations
         axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
         .then((response) => {
+            console.log(response);
             // map themen
             this.themen = response.data.themen;
             // map layout
@@ -49,6 +52,12 @@ Vue.component('dashboard-view', {
             for (var them in this.themen) {
                 this.components[this.themen[e].ID] = { i: this.themen[e].ID, component: "thema-tile", defaultSize: this.themen[e].size};
                 e++;
+            }
+            // map Name
+            if (response.data.dashboard.name == undefined){
+                this.dashboardName = "Kein Name"
+            } else {
+                this.dashboardName = response.data.dashboard.name;
             }
             // Alle Daten gefüllt, rendere Layout
             this.readyForRender = true;
@@ -243,11 +252,19 @@ Vue.component('dashboard-view', {
                     return this.themen[them];
                 }
             }
+        },
+        submitName: function () {
+
         }
     },
     watch: {
         themenAdd: function () {
             this.renderThemenAdd = true;
+        },
+        editDashboardName: function (old, newval) {
+            if(old === false){
+                this.updateDataPoint({table: 'dashboard', cell: 'name', val: this.dashboardName, whereCell: 'ID', whereVal: this.$root.dashboardID, mode: 99});
+            }
         }
     },
     computed: {
@@ -257,10 +274,12 @@ Vue.component('dashboard-view', {
     <div class="dashboard-view">
         <div class="container">
             <div class="row">
-                <div class="col-6">
+                <div class="col-sm-6 col-xs-12">
                     <span class="title">IMDash</span>
+                    <span class="title-name" v-if="!editDashboardName" v-on:click="editDashboardName = !editDashboardName">{{dashboardName}} <i class="material-icons title-icon">create</i></span>
+                    <span class="title-name" v-else><form v-on:submit.prevent="editDashboardName = !editDashboardName" class="title-form"><input type="text" name="dashboardName" v-model="dashboardName" class="title-form" v-on:focusout="editDashboardName = !editDashboardName" v-focus v-select></form></span>
                 </div>
-                <div class="col-6">
+                <div class="col-sm-6 col-xs-12">
                     <button class="title-button float-right" v-tippy="{ html : '#notificationsPanel', reactive : true, interactive : true, placement : 'bottom', theme: 'light', trigger: 'click' }"><i class="material-icons">notifications</i></button>
                     <div id="notificationsPanel" x-placement="bottom">
                         <div class="share-notes-modal">

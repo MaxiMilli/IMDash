@@ -8,6 +8,12 @@ Vue.directive('focus', {
     }
 });
 
+Vue.directive('select', {
+    inserted: function (el) {
+        el.select()
+    }
+});
+
 Vue.use(Snotify);
 let layout = window.VueResponsiveGridLayout.VueResponsiveGridLayout;
 let item = window.VueResponsiveGridLayout.VueGridItem;
@@ -63,11 +69,18 @@ var app = new Vue({
     watch: {
         userID: function (old, neww) {
             this.getDataPoint('userDashboard', 'userID', this.userID, false).then(function (response) {
-                Object(response.data).forEach(user => {
-                    if (user.startup == 1) {
-                        this.dashboardID = user.dashboardID;
-                    }
-                });
+                if (response.data == "{ 'message':'no data' }") {
+                    // neues Dashboard anlegen
+                    this.insertDataPoint({mode: 4, userID: this.userID}).then(function (response) {
+                        this.dashboardID = Number(response.dashboardID);
+                    })
+                } else {
+                    Object(response.data).forEach(user => {
+                        if (user.startup == 1) {
+                            this.dashboardID = user.dashboardID;
+                        }
+                    });
+                }
             }.bind(this));
         },
         dashboardID: function (old, neww) {

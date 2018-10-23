@@ -21,15 +21,32 @@ var mixinAPI = {
         }
       });
     },
+    // this.updateDataPoint({table: 'dashboard', cell: 'name', val: this.dashboardName, whereCell: 'ID', whereVal: this.$root.dashboardID, mode: 99});
     updateDataPoint: function (paramObject) {
       const params = new URLSearchParams();
-      paramObject.forEach((param, id) => {
-        params.append(id, param);
-      });
+      for (var key in paramObject){
+        params.append(key, paramObject[key]);
+      }
       axios.post(this.getAPIURL() + '/update.php', params)
       .catch(function (error) {
           console.log("ERROR UPDATE Object:");
           console.log(paramObject);
+      });
+    },
+
+    insertDataPoint: function (paramObject) {
+      return new Promise((resolve) => {
+        const params = new URLSearchParams();
+        for (var key in paramObject){
+          params.append(key, paramObject[key]);
+        }
+        axios.post(this.getAPIURL() + '/add.php', params)
+        .then(function (response) {
+          resolve(response);
+        }).catch(function (error) {
+          console.log("ERROR INSERT Object:");
+          console.log(paramObject);
+        });
       });
     }
   }

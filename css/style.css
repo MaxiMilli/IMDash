@@ -36,7 +36,30 @@ a:active {
 .title {
     font-family: 'Raleway', sans-serif;
     font-size: 50px;
-    padding-left: 10vw;
+    padding-left: 0vw;
+}
+
+@media (max-width: 1199.98px) { .title { padding-left: 6vw } }
+
+
+@media (max-width: 575.98px) { .title { padding-left: 20vw } }
+
+.title-name {
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+    color: #666666;
+    padding-left: 2vw;
+}
+
+.title-icon {
+    color: #aaaaaa;
+    font-size: 15px;
+}
+
+.title-form {
+    display: inline;
+    border: none;
+    padding: 0;
 }
 
 .title-button {

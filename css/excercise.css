@@ -23,12 +23,24 @@
     height: 60px;
     margin-bottom: 10px;
     overflow: hidden;
-
+    background-color: #ffffff;
 }
 
+.tile-exercise-featured:hover {
+    background-color:#eeeeee;
+}
+
+.tile-excercise-marker {
+    width: 30px;
+    margin-left: 0px;
+    height: 60px;
+    padding:18px;
+    padding-left: 40px;
+    color: #ffffff;
+}
 
 .tile-exercise-name {
-    width: 100%;
+    width: 60%;
     height: 50px;
     padding-top: 10px;
     padding-left: 20px;
@@ -37,17 +49,8 @@
     z-index: 3;
 }
 
-
-.tile-excercise-marker {
-    width: 30px;
-    margin-left: 0px;
-    height: 60px;
-    padding:18px;
-    padding-left: 40px;
-}
-
 .tile-excercise-semester {
-    width: 100%;
+    width: 20%;
     height: 50px;
     padding-top: 15px;
 
@@ -57,7 +60,7 @@
 }
 
 .tile-excercise-level {
-    width: 100%;
+    width: 20%;
     height: 50px;
     padding-top: 15px;
 
@@ -66,26 +69,52 @@
     z-index: 3;
 }
 
-.tile-excercise-button {
-    height: 1.7rem;
-    border-radius: 5px;
-    font-size: 10px;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    margin-top: 10px;
-    padding-top: 5px;
-
-    color: white;
+.tile-exercise-button {
+    display: table;
+    width: 14%;
+    height: 100%;
     background-color: #E91E63;
 }
 
+.tile-exercise-button:hover {
+    display: table;
+    width: 14%;
+    height: 100%;
+    background-color: rgb(195, 27, 83);
+}
 
+.tile-exercise-button p {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 15px;
+    color: white;
+}
 
+.tile-exercise-panel-row {
+    display: flex;
+    flex-wrap: nowrap;
+}
 
+.tile-exercise-learn-progress {
+    font-size: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
 
+.tile-exercise-pagination {
+    width: 100%;
+    align-content: center;
+    display: flex;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+    padding-left: 5%;
+}
+.tile-exercise-pagination button {
+    margin-right: 5px;
+}
 
 .panel {
     display: flex;
@@ -116,5 +145,6 @@
 }
 
 .panel-body {
-    height: 200px;
+    width: 100%;
+    padding: 10px;
 }

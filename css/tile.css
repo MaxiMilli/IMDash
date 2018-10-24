@@ -35,6 +35,10 @@ BODY:       tile-body
     float: left;
 }
 
+.tile--spacing {
+    margin:10px;
+}
+
 .tile-xs {
     background-color: #ffffff;
 
@@ -81,6 +85,10 @@ BODY:       tile-body
 
 .tile50 {
     width: 50%;
+}
+
+.tile80 {
+    width: 80%;
 }
 
 .tile100 {

@@ -66,16 +66,6 @@ Vue.component('dashboard-view', {
             console.log(error);
         });
 
-        // Get Notifications
-        axios.get(this.getAPIURL() + '/get.php?mode=6&id=' + this.$root.userID)
-        .then((response) => {
-            //console.log(response);
-            this.notifications = response.data.notifications;
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
         //Get Themen
         this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
             response.data.forEach(thema => {
@@ -280,18 +270,7 @@ Vue.component('dashboard-view', {
                     <span class="title-name" v-else><form v-on:submit.prevent="editDashboardName = !editDashboardName" class="title-form"><input type="text" name="dashboardName" v-model="dashboardName" class="title-form" v-on:focusout="editDashboardName = !editDashboardName" v-focus v-select></form></span>
                 </div>
                 <div class="col-sm-6 col-xs-12">
-                    <button class="title-button float-right" v-tippy="{ html : '#notificationsPanel', reactive : true, interactive : true, placement : 'bottom', theme: 'light', trigger: 'click' }"><i class="material-icons">notifications</i></button>
-                    <div id="notificationsPanel" x-placement="bottom">
-                        <div class="share-notes-modal">
-                            <h3> Notifications</h3>
-                            <div v-for="noti in notifications" class="notification">
-                                <router-link :to="noti.url">
-                                    <h5>{{noti.title}}</h5>
-                                    <p>{{noti.body}}</p>
-                                </router-link>
-                            </div>
-                        </div>
-                    </div>
+                    <notification-button></notification-button>
                     <a href="#" class="title-button float-right" v-on:click="addTileWindow = !addTileWindow"><i class="material-icons">add</i></a>
                     <a href="#" class="title-button float-right" v-on:click="isDraggable = !isDraggable"><i class="material-icons">edit</i></a>
                 </div>

@@ -50,6 +50,11 @@ Vue.component('main-menu', {
             }
         },
     },
+    watch: {
+        '$route' (to, from) {
+            this.toggleMenu();
+        }
+    },
     template: `
     <div class="menu">
         <div class="page-menu-button">
@@ -75,7 +80,7 @@ Vue.component('main-menu', {
                 </router-link>
             </div>
             <div class="page-menu-list-container">
-                <router-link to="/exercises/1" class="page-menu-list-item">
+                <router-link to="/exercise/1" class="page-menu-list-item">
                     Übungen
                 </router-link>
             </div>

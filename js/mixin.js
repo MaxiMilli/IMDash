@@ -6,16 +6,20 @@ var mixinAPI = {
     getAPIURL: function () {
       return "http://862341-7.web1.fh-htwchur.ch/api";
     },
+    // this.getDataPoint('table', 'col', 'val', true).then(function (response) { ... });
     getDataPoint: function (table, col, val, isString) {
+      console.log (table, col, val, isString);
       return new Promise((resolve) => {
         if (isString) {
           axios.get(this.getAPIURL() + '/get.php?mode=99&table=' + table + '&col=' + col + '&val=' + val + '&isstr=TRUE')
           .then(function(response) {
+            console.log(response);
               resolve(response);
           })
         } else {
           axios.get(this.getAPIURL() + '/get.php?mode=99&table=' + table + '&col=' + col + '&val=' + val + '&isstr=FALSE')
           .then(function(response) {
+            console.log(response);
               resolve(response);
           })
         }

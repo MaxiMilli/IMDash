@@ -14,8 +14,8 @@ const routes = [{
     {
         path: '/presentation/:id',
         component: 'presentation-view'
-    }
-  //{ path: '/exercise/:id', component: 'exercise-view' }
+    },
+    { path: '/exercise/:id', component: 'exercise-overview' }
 ]
 
 // 3. Create the router instance and pass the `routes` option

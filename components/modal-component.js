@@ -39,7 +39,7 @@ Vue.component('modal-component', {
                     <div class="modal-column">
                         <div class="modal-column-head">Übungen</div>
                         <div class="modal-column-list-container">
-                            <router-link class="modal-column-list-item" v-for="item in themadata.exercise" v-on:click="closeModal" :to="{ path: '/exercises/' + item.ID}">
+                            <router-link class="modal-column-list-item" v-for="item in themadata.exercise" v-on:click="closeModal" :to="{ path: '/exercise/' + item.ID}">
                                 <i class="material-icons">code</i> {{ item.name }}
                             </router-link>
                             <span v-if="themadata.exercise.length == 0" class="modal-column-list-noentry"><br><br>Keine Übungen vorhanden </span>

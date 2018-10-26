@@ -1,13 +1,14 @@
 Vue.component('main-menu', {
     data: function () {
         return {
-            count: 0
+            active: false
         }
     },
     methods: {
         toggleMenu: function () {
             if ($('.page-menu').css('left') != '0px')
             {
+                this.active = true;
                 // Animation open Menu
                 $('.page-menu').animate({
                     left: '0px'
@@ -29,30 +30,35 @@ Vue.component('main-menu', {
             }
             else
             {
-                // Animation back
-                $('.page-menu').animate({
-                    left: '-400px'
-                } , 500);
-                $('#page-menu-open').removeClass('is-active');
-                var filterVal = 'blur(0px)';
-                $('#content').css({
-                    'filter':filterVal,
-                    'webkitFilter':filterVal,
-                    'mozFilter':filterVal,
-                    'oFilter':filterVal,
-                    'msFilter':filterVal,
-                    'transition':'all 0.5s ease-out',
-                    '-webkit-transition':'all 0.5s ease-out',
-                    '-moz-transition':'all 0.5s ease-out',
-                    '-o-transition':'all 0.5s ease-out'
-                });
-                $('.page-menu-overlay').removeClass('page-menu-overlay--set');
+                this.closeMenu();
             }
         },
+        closeMenu: function () {
+            // Animation back
+            $('.page-menu').animate({
+                left: '-400px'
+            } , 500);
+            $('#page-menu-open').removeClass('is-active');
+            var filterVal = 'blur(0px)';
+            $('#content').css({
+                'filter':filterVal,
+                'webkitFilter':filterVal,
+                'mozFilter':filterVal,
+                'oFilter':filterVal,
+                'msFilter':filterVal,
+                'transition':'all 0.5s ease-out',
+                '-webkit-transition':'all 0.5s ease-out',
+                '-moz-transition':'all 0.5s ease-out',
+                '-o-transition':'all 0.5s ease-out'
+            });
+            $('.page-menu-overlay').removeClass('page-menu-overlay--set');
+        }
     },
     watch: {
         '$route' (to, from) {
-            this.toggleMenu();
+            if (this.active) {
+                this.toggleMenu();
+            }
         }
     },
     template: `
@@ -80,7 +86,7 @@ Vue.component('main-menu', {
                 </router-link>
             </div>
             <div class="page-menu-list-container">
-                <router-link to="/exercise/1" class="page-menu-list-item">
+                <router-link to="/exercise" class="page-menu-list-item">
                     Übungen
                 </router-link>
             </div>

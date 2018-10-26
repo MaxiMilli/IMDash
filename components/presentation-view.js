@@ -245,7 +245,9 @@ Vue.component('presentation-view', {
     <div class="container">
         <div class="row head-row">
             <div class="col-9">
-                <a href="" style="color:#000000;"><span class="title">IMDash</span></a>
+                <a href="" style="color:#000000;">
+                    <span class="title-site">IMDash</span>
+                </a>
             </div>
             <div class="col-3">
             </div>

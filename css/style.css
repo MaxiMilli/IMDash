@@ -7,6 +7,7 @@
 
 a {
     color: #000000;
+    cursor: pointer;
 }
 
 a:hover,
@@ -33,16 +34,16 @@ a:active {
 
 /* ----------- TITLE ------------ */
 
-.title {
+.title-site {
     font-family: 'Raleway', sans-serif;
     font-size: 50px;
     padding-left: 0vw;
 }
 
-@media (max-width: 1199.98px) { .title { padding-left: 6vw } }
+@media (max-width: 1199.98px) { .title-site { padding-left: 6vw } }
 
 
-@media (max-width: 575.98px) { .title { padding-left: 20vw } }
+@media (max-width: 575.98px) { .title-site { padding-left: 20vw } }
 
 .title-name {
     font-family: 'Raleway', sans-serif;
@@ -242,4 +243,10 @@ a:active {
     border: none;
     box-shadow: none;
     text-decoration: none;
+}
+
+
+
+.row {
+    width: 100%;
 }

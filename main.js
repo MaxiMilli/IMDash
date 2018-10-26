@@ -15,6 +15,9 @@ Vue.directive('select', {
 });
 
 Vue.use(Snotify);
+Vue.use(VueCodeMirror);
+window.CodeMirror = VueCodeMirror.CodeMirror
+
 let layout = window.VueResponsiveGridLayout.VueResponsiveGridLayout;
 let item = window.VueResponsiveGridLayout.VueGridItem;
 let componentMixins = window.VueResponsiveGridLayout.GridItemComponentsMixins;

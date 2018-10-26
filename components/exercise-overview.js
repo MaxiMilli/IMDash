@@ -4,8 +4,10 @@ Vue.component('exercise-overview', {
             count: 0,
             categorys: [],
             renderCategorys: false,
+            selectedCategorys: [],
             notifications: [],
-            exercises: []
+            exercises: [],
+
         }
     },
     mixins: [
@@ -37,10 +39,44 @@ Vue.component('exercise-overview', {
 
             return colo;
         },
+        toggleCatSelection: function (id) {
+            if (this.selectedCategorys.includes(id)) {
+                // remove
+                var index = this.selectedCategorys.indexOf(id);
+                if (index > -1) {
+                    this.selectedCategorys.splice(index, 1);
+                }
+            } else {
+                //add
+                this.selectedCategorys.push(id);
+            }
+        }
     },
     computed: {
-        getFeaturedExercises: function () {  
-            return this.exercises;
+        getFeaturedExercises: function () {
+            var ret = [];
+            this.exercises.forEach(function (exe) {
+                if  (exe.featured == '1'){
+                    ret.push(exe);
+                }
+            });
+            return ret;
+        },
+        getSortedExercises: function () {
+            var ret = [];
+            var that = this;
+            this.exercises.forEach(function (exe) {
+                if (that.selectedCategorys.length !== 0) {
+                    // Some Sort
+                    if (that.selectedCategorys.includes(exe.category)) {
+                        ret.push(exe);
+                    }
+                    console.log(exe.ID)
+                } else {
+                    ret.push(exe);
+                }
+            });
+            return ret;
         }
     },
     template: `
@@ -48,7 +84,7 @@ Vue.component('exercise-overview', {
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
-                    <span class="title">IMDash</span>
+                    <span class="title-site">IMDash</span>
                     <span class="title-name">Übungen</span>
                 </div>
                 <div class="col-sm-6 col-xs-12">
@@ -62,7 +98,7 @@ Vue.component('exercise-overview', {
             </div>
 
             <div class="row">
-                <div v-for="exercise in getFeaturedExercises" class="tile-exercise-featured tile-border--black">
+                <div v-if="getFeaturedExercises.length !== 0" v-for="exercise in getFeaturedExercises" class="tile-exercise-featured tile-border--black">
                     <div class="tile-excercise-marker" :style="{ 'background-color': getCategoryColor(exercise.category)}">
                         <i class="material-icons float-right">arrow_forward</i>
                     </div>
@@ -75,9 +111,17 @@ Vue.component('exercise-overview', {
                     <div class=" tile-excercise-level">
                         <p>Level {{ exercise.level }}</p>
                     </div>
-                    <button class="btn tile-exercise-button">
+                    <router-link :to="{ path: '/exercise/solve/' + exercise.ID}" class="btn tile-exercise-button">
                         <p>Übung lösen</p>
-                    </button>
+                    </router-link>
+                </div>
+                <div v-else class="tile-exercise-featured tile-border--black">
+                    <div class="tile-excercise-marker" style="background-color: gray; color: white;">
+                        <i class="material-icons float-right">cloud_download</i>
+                    </div>
+                    <div class=" tile-exercise-name">
+                        <p>Load...</p>
+                    </div>
                 </div>
             </div>
 
@@ -113,9 +157,9 @@ Vue.component('exercise-overview', {
             </div>
 
             <div class="row">
-                <div v-for="cat in categorys" class="col-1 topic" :style="{ 'background-color': cat.color}">
+                <button v-for="cat in categorys" @click="toggleCatSelection(cat.ID)" class="col-1 topic" :style="{ 'background-color': cat.color}">
                     <p>{{cat.name}}</p>
-                </div>
+                </button>
             </div>
 
             <div class="row">
@@ -123,7 +167,7 @@ Vue.component('exercise-overview', {
             </div>
 
             <div class="row">
-                <exercise-pagination v-if="exercises" :listData="exercises" :size="10" :categoryList="categorys"></exercise-pagination>
+                <exercise-pagination v-if="exercises" :listData="getSortedExercises" :size="10" :categoryList="categorys"></exercise-pagination>
             </div>
         </div>
     </div>    

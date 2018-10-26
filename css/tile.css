@@ -87,6 +87,10 @@ BODY:       tile-body
     width: 50%;
 }
 
+.tile60 {
+    width: 60%;
+}
+
 .tile80 {
     width: 80%;
 }

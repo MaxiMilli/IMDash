@@ -121,6 +121,22 @@ a:active {
     font-weight: 900;
     padding-bottom: 20px;
     color: #444444;
+    width: 100%;
+    
+    line-height: 10px;
+}
+
+.page-menu-title-icon {
+    background-color: transparent;
+    border: none;
+    line-height: 10px;
+    margin-top: 5px;
+}
+
+.page-menu-title-icon:hover {
+    background-color: white;
+    border: none;
+    
 }
 
 .page-menu-list-container {

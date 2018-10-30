@@ -18,6 +18,11 @@ Vue.component('modal-component', {
     created () {
     },
     watch: {
+        '$route' (to, from) {
+            if (this.$root.viewModal) {
+                this.closeModal();
+            }
+        }
     },
     template: `
     <div class="modal">

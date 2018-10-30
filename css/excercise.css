@@ -141,6 +141,12 @@
     width: 100%;
 }
 
+.exercise-preview-iframe {
+    border: none;
+    height: 60vh;
+    width: 100%;
+}
+
 .panel {
     display: flex;
     flex-wrap: wrap;
@@ -172,4 +178,10 @@
 .panel-body {
     width: 100%;
     padding: 10px;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }

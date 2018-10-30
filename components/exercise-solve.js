@@ -7,9 +7,10 @@ Vue.component('exercise-solve', {
                 html: {},
                 css: {},
             },
-            url: 'http://codepen.io/Mertl/pen/pxQzWb?height=500&theme-id=light&default-tab=js,result',
+            url: 'https://codepen.io/Legend9/pen/yxMQqR?height=500&theme-id=light&default-tab=js,result',
+            embed: 'https://codepen.io/Legend9/embed/yxMQqR?default-tab=result',
             showExerciseModal: false,
-            jscode: '',
+            htmlcode: '',
         }
     },
     mixins: [
@@ -22,7 +23,7 @@ Vue.component('exercise-solve', {
         }.bind(this));
 
         this.getDataPoint('exerciseCodebase', 'exerciseID',  this.$route.params.id, false).then(function (response) {
-            console.log(response);
+            
             var js = JSON.parse(response.data[0].js);
             var html = JSON.parse(response.data[0].html);
             var css = JSON.parse(response.data[0].css);
@@ -40,21 +41,32 @@ Vue.component('exercise-solve', {
     methods: {
         closeModal: function () {
             this.showExerciseModal = false;
-            axios.get('http://codepen.io/Mertl/pen/pxQzWb.js', {crossdomain: true, 'Access-Control-Allow-Origin': 'imdash'})
-            .then(function (response) {
-                this.jscode = response.data;
-            }.bind(this));
-
             var invocation = new XMLHttpRequest();
-            var url = 'http://codepen.io/Mertl/pen/pxQzWb.js';
+            var url = 'https://codepen.io/Legend9/pen/yxMQqR.html';
+            var that = this;
             if(invocation) {    
                 invocation.open('GET', url, true);
                 invocation.onreadystatechange = function (val) {
-                    console.log(val, invocation)
+                    if (invocation.readyState == 4) {
+                        if (invocation.status == 200) {
+                            var data = invocation.responseText;
+                            that.htmlcode = data;
+                        }
+                    }
+                    //this.htmlcode = invocation.htmlcode;
                 };
-                invocation.send(); 
+                invocation.send();
             }
         },
+        showExercise: function () {
+            $.sweetModal({
+                title: 'Übung: ' + this.exercise.name,
+                content: this.exercise.content
+            });
+        },
+        placeExercise: function () {
+
+        }
     },
     computed: {
         getEmbedUrl: function () {
@@ -90,15 +102,19 @@ Vue.component('exercise-solve', {
                     {{exercise.name}}
                 </div>
 
-                <div class="tile-body" style="height: 500px;">
-
-                    <p><button class="btn btn-light" @click="showExerciseModal = true">Übung öffnen</button><br></p>
-                    <p>{{jscode}}</p>
+                <div class="tile-body flex" style="height: 500px;">
+                <p>{{ htmlcode }}</p>
+                    <p><button class="btn btn-light" @click="showExerciseModal = true">Übung öffnen</button><br></p><br>
+                    <iframe :src="embed" class="exercise-preview-iframe"></iframe>
+                    
                     <!--<iframe height='265' scrolling='no' title='Deformation' :src="[getEmbedUrl + '?height=265&theme-id=light&default-tab=js,result']" frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Mertl/pen/pxQzWb/'>Deformation</a> by Michal (<a href='https://codepen.io/Mertl'>@Mertl</a>) on <a href='https://codepen.io'>CodePen</a>.
                     </iframe>-->
                     <div class="exercise-body-bg" v-if="showExerciseModal">
-                        <div class="tile-head">
-                            Übung  <a v-on:click="closeModal" class="color-white"><i class="material-icons float-right">close</i></a>
+                        <div class="tile-head" style="height: 65px;">
+                            Übung   
+                                <button class="btn btn-danger float-right" @click="closeModal">Schliessen</button>
+                                <button class="btn btn-light float-right" @click="showExercise">Aufgabe anzeigen</button>
+                                <button class="btn btn-success float-right" @click="placeExercise">Abgeben</button> 
                         </div>
 
                         <div class="exercise-body">

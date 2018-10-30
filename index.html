@@ -35,7 +35,7 @@
 
 
     <div id="app">
-        <main-menu></main-menu>
+        <main-menu v-if="userDataLoaded"></main-menu>
         <div id="content">
             <router-view v-if="userDataLoaded"></router-view>
         </div>

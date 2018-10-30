@@ -2,7 +2,8 @@ Vue.component('main-menu', {
     data: function () {
         return {
             active: false,
-            userDashboards: []
+            userDashboards: [],
+            addDashboardLoading: false,
         }
     },
     mixins: [
@@ -56,19 +57,29 @@ Vue.component('main-menu', {
                 '-o-transition':'all 0.5s ease-out'
             });
             $('.page-menu-overlay').removeClass('page-menu-overlay--set');
-        }
+        },
+        addDashboard: function () {
+            this.addDashboardLoading = true;
+            var that = this;
+            this.insertDataPoint({mode: 4, userID: this.userID, startup: 0}).then(function (response) {
+                console.log(response);
+                that.getDataPoint('dashboard', 'ID', response.data.dashboardID, false).then(function (response2) {
+                    console.log(response2);
+                    that.userDashboards.push(response2.data[0]);
+                    that.addDashboardLoading = false;
+                });
+            });
+        },
     },
     mounted: function () {
+        var that = this;
         this.getDataPoint('userDashboard', 'userID', this.$root.userID, false).then(function (response) {
-            //if (response.data == "{ 'message':'no data' }") {
-                // neues Dashboard anlegen
-               // this.insertDataPoint({mode: 4, userID: this.userID}).then(function (response) {
-               //     this.dashboardID = Number(response.dashboardID);
-               // })
-            //} else {
-                console.log(response.data); 
-                this.userDashboards = response.data;
-            //}
+            for (var i = 0; i < response.data.length; i++) {
+                that.getDataPoint('dashboard', 'ID', response.data[i].dashboardID, false).then(function (response2) {
+                    console.log(response2);
+                    that.userDashboards.push(response2.data[0]);
+                });
+            }
         }.bind(this));
     },
     watch: {
@@ -91,12 +102,14 @@ Vue.component('main-menu', {
             <center><span class="title" style="padding-left: 0px;">IMDash</span></center><br><br>
             <div class="page-menu-title">
                 Dashboards
-                <button class="page-menu-title-icon"><i class="material-icons">add</i></button>
+                <button @click="addDashboard" class="page-menu-title-icon float-right"><i class="material-icons">add</i></button>
             </div>
-            
-            <div class="page-menu-list-container">
+            <div class="page-menu-list-container" v-if="addDashboardLoading">
+                Lädt gerade...
+            </div>
+            <div v-else class="page-menu-list-container" v-for="dash in userDashboards">
                 <a class="page-menu-list-item" href="">
-                    Start
+                    {{ dash.name }}
                 </a>
             </div>
             <hr class="page-menu-hr">

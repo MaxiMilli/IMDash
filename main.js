@@ -74,7 +74,7 @@ var app = new Vue({
             this.getDataPoint('userDashboard', 'userID', this.userID, false).then(function (response) {
                 if (response.data == "{ 'message':'no data' }") {
                     // neues Dashboard anlegen
-                    this.insertDataPoint({mode: 4, userID: this.userID}).then(function (response) {
+                    this.insertDataPoint({mode: 4, userID: this.userID, startup: 1}).then(function (response) {
                         this.dashboardID = Number(response.dashboardID);
                     })
                 } else {

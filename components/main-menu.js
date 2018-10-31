@@ -5,6 +5,7 @@ Vue.component('main-menu', {
             userDashboards: [],
             addDashboardLoading: false,
             searchOpen: false,
+            searchText: ''
         }
     },
     mixins: [
@@ -12,6 +13,7 @@ Vue.component('main-menu', {
     ],
     methods: {
         toggleMenu: function () {
+            this.searchOpen = false;
             if ($('.page-menu').css('left') != '0px')
             {
                 this.active = true;
@@ -62,28 +64,20 @@ Vue.component('main-menu', {
         addDashboard: function () {
             this.addDashboardLoading = true;
             var that = this;
-            this.insertDataPoint({mode: 4, userID: this.userID, startup: 0}).then(function (response) {
-                console.log(response);
+            this.insertDataPoint({mode: '4', userID: String(this.$root.userID), startup: '0'}).then(function (response) {
                 that.getDataPoint('dashboard', 'ID', response.data.dashboardID, false).then(function (response2) {
-                    console.log(response2);
                     that.userDashboards.push(response2.data[0]);
                     that.addDashboardLoading = false;
                 });
             });
         },
-        toggleSearch: function () {
-
-            if (this.searchOpen) {
-                $('.search-circle').removeClass('circle-extendet');
-                $('.search-form').hide();
-                $('.search-icon').text('search');
-                this.searchOpen = false;
-            } else {
-                $('.search-circle').addClass('circle-extendet');
-                $('.search-form').show();
-                $('.search-icon').text('arrow_back');
-                this.searchOpen = true;
-            }
+        searchDash: function () {
+            this.$router.push({ path: '/search/' + this.searchText});
+            this.searchOpen = false;
+        },
+        switchDashboard: function () {
+            this.$root.userDataLoaded = false;
+            
         }
     },
     mounted: function () {
@@ -112,9 +106,10 @@ Vue.component('main-menu', {
                     <span class="hamburger-inner"></span>
                 </span>
             </button>
-            <div class="search-circle">
-                <i class="material-icons search-icon" @click="toggleSearch">search</i>
-                <input type="text" placeholder="Suche" class="search-form">
+            <div class="search-circle" :class="{ 'circle-extendet': searchOpen }">
+                <i v-if="searchOpen" class="material-icons search-icon" @click="searchOpen = !searchOpen">arrow_back</i>
+                <i v-else class="material-icons search-icon" @click="searchOpen = !searchOpen">search</i>
+                <input v-if="searchOpen" type="text" placeholder="Suche" class="search-form" @keyup.enter="searchDash" v-model="searchText" v-focus v-select>
             </div>
         </div>
         <div class="page-menu">
@@ -127,9 +122,9 @@ Vue.component('main-menu', {
                 Lädt gerade...
             </div>
             <div v-else class="page-menu-list-container" v-for="dash in userDashboards">
-                <a class="page-menu-list-item" href="">
+                <router-link :to="{path: '/' + dash.ID}" class="page-menu-list-item">
                     {{ dash.name }}
-                </a>
+                </router-link>
             </div>
             <hr class="page-menu-hr">
             <div class="page-menu-title">Üben</div>

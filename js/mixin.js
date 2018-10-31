@@ -42,6 +42,10 @@ var mixinAPI = {
       return new Promise((resolve) => {
         const params = new URLSearchParams();
         for (var key in paramObject){
+          if (paramObject[key] == undefined) {
+            console.warn("WARNING: [Mixin] insertDataPoint hat undefinierte Objekte.");
+          }
+
           params.append(key, paramObject[key]);
         }
         axios.post(this.getAPIURL() + '/add.php', params)

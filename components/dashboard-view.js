@@ -1,6 +1,7 @@
 Vue.component('dashboard-view', {
     data: function () {
         return {
+            dashID: 0,
             dashboardName: 'Name',
             notifications: [],
             themen: { },
@@ -23,61 +24,65 @@ Vue.component('dashboard-view', {
         window.VueResponsiveGridLayout.GridItemComponentsMixins
     ],
     mounted: function () {
-        // Get Layout and Presentations
-        axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
-        .then((response) => {
-            console.log(response);
-            // map themen
-            this.themen = response.data.themen;
-            // map layout
-            if (response.data.dashboard.layout == ''){
-                var obj = {};
-            } else {
-                var obj = JSON.parse(response.data.dashboard.layout);
-            }
-            if (jQuery.isEmptyObject(obj)) {
-                
-                this.layouts[this.breakpoint] = [ ];
-                var t = 0;
-                for (var them in this.themen) {
-                    var single = { x: 0, y: (t * this.themen[t].size), w: 2, h: 8, i: this.themen[t].ID};
-                    this.layouts[this.breakpoint].push(single);
-                    t++;
-                }
-                this.layoutUpdatedEvent();
-            } else {
-                this.layouts = obj;
-            }
-            var e = 0;
-            for (var them in this.themen) {
-                this.components[this.themen[e].ID] = { i: this.themen[e].ID, component: "thema-tile", defaultSize: this.themen[e].size};
-                e++;
-            }
-            // map Name
-            if (response.data.dashboard.name == undefined){
-                this.dashboardName = "Kein Name"
-            } else {
-                this.dashboardName = response.data.dashboard.name;
-            }
-            // Alle Daten gefüllt, rendere Layout
-            this.readyForRender = true;
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-        //Get Themen
-        this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
-            response.data.forEach(thema => {
-                thema.hover=false;
-                thema.headstyle = {
-                    backgroundColor: thema.priColor
-                }
-                this.themenAdd.push(thema);
-            });
-        }.bind(this));
+        this.dashID = this.$root.dashboardID;
+        this.createDashboardView();
     },
     methods: {
+        createDashboardView: function () {
+            // Get Layout and Presentations
+            axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
+            .then((response) => {
+                console.log(response);
+                // map themen
+                this.themen = response.data.themen;
+                // map layout
+                if (response.data.dashboard.layout == ''){
+                    var obj = {};
+                } else {
+                    var obj = JSON.parse(response.data.dashboard.layout);
+                }
+                if (jQuery.isEmptyObject(obj)) {
+                    
+                    this.layouts[this.breakpoint] = [ ];
+                    var t = 0;
+                    for (var them in this.themen) {
+                        var single = { x: 0, y: (t * this.themen[t].size), w: 2, h: 8, i: this.themen[t].ID};
+                        this.layouts[this.breakpoint].push(single);
+                        t++;
+                    }
+                    this.layoutUpdatedEvent();
+                } else {
+                    this.layouts = obj;
+                }
+                var e = 0;
+                for (var them in this.themen) {
+                    this.components[this.themen[e].ID] = { i: this.themen[e].ID, component: "thema-tile", defaultSize: this.themen[e].size};
+                    e++;
+                }
+                // map Name
+                if (response.data.dashboard.name == undefined){
+                    this.dashboardName = "Kein Name"
+                } else {
+                    this.dashboardName = response.data.dashboard.name;
+                }
+                // Alle Daten gefüllt, rendere Layout
+                this.readyForRender = true;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+            //Get Themen
+            this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
+                response.data.forEach(thema => {
+                    thema.hover=false;
+                    thema.headstyle = {
+                        backgroundColor: thema.priColor
+                    }
+                    this.themenAdd.push(thema);
+                });
+            }.bind(this));
+        },
         scrollHorizontal: function (e) {
             // TODO: Mit der Maus Horizontal scrollen funktioniert noch nicht.
             e = window.event || e;
@@ -255,7 +260,7 @@ Vue.component('dashboard-view', {
             if(old === false){
                 this.updateDataPoint({table: 'dashboard', cell: 'name', val: this.dashboardName, whereCell: 'ID', whereVal: this.$root.dashboardID, mode: 99});
             }
-        }
+        },
     },
     computed: {
         

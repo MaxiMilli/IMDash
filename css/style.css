@@ -271,6 +271,7 @@ a:active {
     width: 60px;
     height: 60px;
     background-color: #ffffff;
+    border: none;
     border-radius: 30px;
     position: absolute;
     display: block;
@@ -288,7 +289,8 @@ a:active {
 .circle-extendet {
     width: 300px;
     height: 60px;
-    background-color: #F9A825;
+    background-color: #ffffff;
+    border: #000000 solid 1px;
     border-radius: 30px;
     position: absolute;
     display: flex;
@@ -301,7 +303,6 @@ a:active {
 }
 
 .search-form {
-    display: none;
     background-color: transparent;
     border: none;
     font-size: 20px;

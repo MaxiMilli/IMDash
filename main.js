@@ -37,6 +37,7 @@ var app = new Vue({
         viewModal: false,
         viewModalData: {},
         modalID: 5,
+        dashID: 0, //Old id
         dashboardID: 0,
         userID: 0,
         userDataLoaded: false,
@@ -76,11 +77,13 @@ var app = new Vue({
                     // neues Dashboard anlegen
                     this.insertDataPoint({mode: 4, userID: this.userID, startup: 1}).then(function (response) {
                         this.dashboardID = Number(response.dashboardID);
+                        this.dashID = this.dashboardID;
                     })
                 } else {
                     Object(response.data).forEach(user => {
                         if (user.startup == 1) {
                             this.dashboardID = user.dashboardID;
+                            this.dashID = this.dashboardID;
                         }
                     });
                 }
@@ -88,6 +91,14 @@ var app = new Vue({
         },
         dashboardID: function (old, neww) {
             this.userDataLoaded = true;
+        },
+        '$route' (old, fresh) {
+            if (this.dashID != this.$route.params.id) {
+                console.log(old,fresh);
+                this.userDataLoaded = false;
+                this.dashboardID = this.$route.params.id;
+                this.dashID = this.$route.params.id;
+            }
         }
     }
 });

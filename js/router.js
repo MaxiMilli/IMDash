@@ -4,7 +4,7 @@
 // `Vue.extend()`, or just a component options object.
 // We'll talk about nested routes later.
 const routes = [{
-        path: '/',
+        path: '/:id',
         component: 'dashboard-view',
         /*children: [{
             path: '/modal',
@@ -22,6 +22,10 @@ const routes = [{
     {
         path: '/exercise/solve/:id',
         component: 'exercise-solve'
+    },
+    {
+        path: '/search/:searchterm',
+        component: 'search-view'
     }
 ]
 

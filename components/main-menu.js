@@ -4,6 +4,7 @@ Vue.component('main-menu', {
             active: false,
             userDashboards: [],
             addDashboardLoading: false,
+            searchOpen: false,
         }
     },
     mixins: [
@@ -70,6 +71,20 @@ Vue.component('main-menu', {
                 });
             });
         },
+        toggleSearch: function () {
+
+            if (this.searchOpen) {
+                $('.search-circle').removeClass('circle-extendet');
+                $('.search-form').hide();
+                $('.search-icon').text('search');
+                this.searchOpen = false;
+            } else {
+                $('.search-circle').addClass('circle-extendet');
+                $('.search-form').show();
+                $('.search-icon').text('arrow_back');
+                this.searchOpen = true;
+            }
+        }
     },
     mounted: function () {
         var that = this;
@@ -93,13 +108,17 @@ Vue.component('main-menu', {
     <div class="menu">
         <div class="page-menu-button">
             <button v-on:click="toggleMenu" class="hamburger hamburger--spin" id="page-menu-open" type="button">
-            <span class="hamburger-box">
-                <span class="hamburger-inner"></span>
-            </span>
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
             </button>
+            <div class="search-circle">
+                <i class="material-icons search-icon" @click="toggleSearch">search</i>
+                <input type="text" placeholder="Suche" class="search-form">
+            </div>
         </div>
         <div class="page-menu">
-            <center><span class="title" style="padding-left: 0px;">IMDash</span></center><br><br>
+            <center><span class="title-site" style="padding-left: 0px;">IMDash</span></center><br><br>
             <div class="page-menu-title">
                 Dashboards
                 <button @click="addDashboard" class="page-menu-title-icon float-right"><i class="material-icons">add</i></button>

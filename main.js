@@ -78,18 +78,25 @@ var app = new Vue({
                     this.insertDataPoint({mode: 4, userID: this.userID, startup: 1}).then(function (response) {
                         this.dashboardID = Number(response.dashboardID);
                         this.dashID = this.dashboardID;
+                        this.$router.push('/' + this.dashboardID);  
                     })
                 } else {
                     Object(response.data).forEach(user => {
-                        if (user.startup == 1) {
+                        console.log(user);
+                        if (user.startup == '1') {
                             this.dashboardID = user.dashboardID;
                             this.dashID = this.dashboardID;
+                            this.$router.push('/' + this.dashboardID);
                         }
                     });
                 }
             }.bind(this));
         },
         dashboardID: function (old, neww) {
+            if (this.$router.currentRoute.name == 'home') {
+                console.log(this.$router);
+                console.log(this.$router.currentRoute);
+            }
             this.userDataLoaded = true;
         },
         '$route' (old, fresh) {

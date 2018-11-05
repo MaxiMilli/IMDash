@@ -17,6 +17,7 @@ Vue.component('dashboard-view', {
             isDraggable: false,
             readyForRender: false,
             editDashboardName: false,
+            tileRender: false,
         }
     },
     mixins: [
@@ -25,6 +26,7 @@ Vue.component('dashboard-view', {
     ],
     mounted: function () {
         this.dashID = this.$root.dashboardID;
+        this.tileRender = false;
         this.createDashboardView();
     },
     methods: {
@@ -67,6 +69,7 @@ Vue.component('dashboard-view', {
                 }
                 // Alle Daten gefüllt, rendere Layout
                 this.readyForRender = true;
+                this.tileRender = true;
             })
             .catch(function (error) {
                 console.log(error);
@@ -81,7 +84,7 @@ Vue.component('dashboard-view', {
                     }
                     this.themenAdd.push(thema);
                 });
-            }.bind(this));
+            }.bind(this));  
         },
         scrollHorizontal: function (e) {
             // TODO: Mit der Maus Horizontal scrollen funktioniert noch nicht.
@@ -261,6 +264,15 @@ Vue.component('dashboard-view', {
                 this.updateDataPoint({table: 'dashboard', cell: 'name', val: this.dashboardName, whereCell: 'ID', whereVal: this.$root.dashboardID, mode: 99});
             }
         },
+        '$route' (to, from) {
+            if (this.$root.dashboardID != from) {
+                var newID = this.$route.params.id;
+                this.$root.dashboardID = newID;
+                this.dashID = newID;
+                this.tileRender = false;
+                this.createDashboardView();
+            }
+        },
     },
     computed: {
         
@@ -276,8 +288,8 @@ Vue.component('dashboard-view', {
                 </div>
                 <div class="col-sm-6 col-xs-12">
                     <notification-button></notification-button>
-                    <a href="#" class="title-button float-right" v-on:click="addTileWindow = !addTileWindow"><i class="material-icons">add</i></a>
-                    <a href="#" class="title-button float-right" v-on:click="isDraggable = !isDraggable"><i class="material-icons">edit</i></a>
+                    <button class="title-button float-right" v-on:click="addTileWindow = !addTileWindow"><i class="material-icons">add</i></button>
+                    <button class="title-button float-right" v-on:click="isDraggable = !isDraggable"><i class="material-icons">edit</i></button>
                 </div>
             </div>
         </div>
@@ -330,7 +342,7 @@ Vue.component('dashboard-view', {
                 </div>
             </div>
         </transition>
-        <div class="container">
+        <div class="container" v-if="tileRender">
             <div class="row">
                 <div class="col-12">
                     <div class="overlay">

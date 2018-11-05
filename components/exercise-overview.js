@@ -7,7 +7,6 @@ Vue.component('exercise-overview', {
             selectedCategorys: [],
             notifications: [],
             exercises: [],
-
         }
     },
     mixins: [

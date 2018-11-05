@@ -6,6 +6,7 @@
 const routes = [{
         path: '/:id',
         component: 'dashboard-view',
+        name: 'home'
         /*children: [{
             path: '/modal',
             compoent: 'modal-component'

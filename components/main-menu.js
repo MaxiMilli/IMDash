@@ -129,7 +129,7 @@ Vue.component('main-menu', {
             <hr class="page-menu-hr">
             <div class="page-menu-title">Üben</div>
             <div class="page-menu-list-container">
-                <router-link to="/exercise" class="page-menu-list-item">
+                <router-link :to="{path: '/exercise'}" class="page-menu-list-item">
                     Alle Übungen
                 </router-link>
             </div>

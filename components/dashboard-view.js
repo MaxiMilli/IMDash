@@ -31,6 +31,7 @@ Vue.component('dashboard-view', {
     },
     methods: {
         createDashboardView: function () {
+
             // Get Layout and Presentations
             axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
             .then((response) => {
@@ -265,6 +266,8 @@ Vue.component('dashboard-view', {
             }
         },
         '$route' (to, from) {
+            console.log(this.$route.params);
+            console.log(to);
             if (this.$root.dashboardID != from) {
                 var newID = this.$route.params.id;
                 this.$root.dashboardID = newID;

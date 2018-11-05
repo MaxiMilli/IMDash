@@ -260,3 +260,9 @@ border-bottom-right-radius: 30px;
     padding: 5px;
     padding-left: 30%;
 }
+
+.tile-action {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}

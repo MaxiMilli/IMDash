@@ -14,19 +14,23 @@ const routes = [{
     },
     {
         path: '/presentation/:id',
-        component: 'presentation-view'
+        component: 'presentation-view',
+        name: 'presentation'
     },
     { 
-        path: '/exercise', 
-        component: 'exercise-overview'
+        path: '/exercises/overview', 
+        component: 'exercise-overview',
+        name: 'exercise'
     },
     {
         path: '/exercise/solve/:id',
-        component: 'exercise-solve'
+        component: 'exercise-solve',
+        name: 'exercise-solve'
     },
     {
         path: '/search/:searchterm',
-        component: 'search-view'
+        component: 'search-view',
+        name: 'search'
     }
 ]
 

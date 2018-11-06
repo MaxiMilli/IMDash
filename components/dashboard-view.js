@@ -35,6 +35,7 @@ Vue.component('dashboard-view', {
             // Get Layout and Presentations
             axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
             .then((response) => {
+                console.log(this.$root.dashboardID);
                 console.log(response);
                 // map themen
                 this.themen = response.data.themen;
@@ -264,21 +265,16 @@ Vue.component('dashboard-view', {
             if(old === false){
                 this.updateDataPoint({table: 'dashboard', cell: 'name', val: this.dashboardName, whereCell: 'ID', whereVal: this.$root.dashboardID, mode: 99});
             }
-        },
-        '$route' (to, from) {
-            console.log(this.$route.params);
-            console.log(to);
-            if (this.$root.dashboardID != from) {
-                var newID = this.$route.params.id;
-                this.$root.dashboardID = newID;
-                this.dashID = newID;
-                this.tileRender = false;
-                this.createDashboardView();
-            }
-        },
+        }
     },
     computed: {
-        
+        getRouteID: function () {
+            var newID = this.$route.params.id;
+            this.$root.dashboardID = newID;
+            this.dashID = newID;
+            this.tileRender = false;
+            this.createDashboardView();
+        }
     },
     template: `
     <div class="dashboard-view">

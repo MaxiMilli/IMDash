@@ -99,7 +99,7 @@ var app = new Vue({
             }
             this.userDataLoaded = true;
         },
-        '$route' (old, fresh) {
+        /*'$route' (old, fresh) {
             if (this.dashID != this.$route.params.id) {
                 console.log(old,fresh);
                 this.userDataLoaded = false;
@@ -107,6 +107,7 @@ var app = new Vue({
                 this.dashID = this.$route.params.id;
             }
         }
+        */
     }
 });
 

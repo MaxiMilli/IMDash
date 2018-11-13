@@ -353,7 +353,7 @@ Vue.component('dashboard-view', {
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <span class="title-site">IMDash</span>
-                    <span class="title-name" v-if="!editDashboardName" v-on:click="editDashboardName = !editDashboardName">{{dashboardName}} <i class="material-icons title-icon">create</i></span>
+                    <span class="title-name" v-if="!editDashboardName" v-on:click="editDashboardName = !editDashboardName" style="cursor: pointer;">{{dashboardName}} <i class="material-icons title-icon">create</i></span>
                     <span class="title-name" v-else><form v-on:submit.prevent="editDashboardName = !editDashboardName" class="title-form"><input type="text" name="dashboardName" v-model="dashboardName" class="title-form" v-on:focusout="editDashboardName = !editDashboardName" v-focus v-select></form></span>
                 </div>
                 <div class="col-sm-6 col-xs-12">

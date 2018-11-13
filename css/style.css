@@ -73,10 +73,12 @@ a:active {
 }
 
 .title-button {
-    background-color: yellow;
-    border-radius: 50px;
+    background-color: gold;
+    border-radius: 5px;
     margin: 10px;
     padding: 6px;
+    padding-bottom: 2px;
+    border: none;
 
     color: #000000;
     cursor: pointer;
@@ -105,7 +107,7 @@ a:active {
 /* -------------- Page MENU ----------- */
 .page-menu {
     width: 400px;
-    background-color: #fbff00;
+    background-color: gold;
     position: fixed;
     height: 100%;
     padding: 10px;

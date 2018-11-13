@@ -1,4 +1,3 @@
-
 //const URL = "862341-7.web1.fh-htwchur.ch/api/get.php?mode=1&id=1";
 //const apiURL = "http://862341-7.web1.fh-htwchur.ch/api";
 
@@ -46,7 +45,12 @@ var app = new Vue({
         this.getDataPoint('user', 'active', 1).then(function (response) {
             var optString = "";
             Object(response.data).forEach(user => {
-                optString += "<option value='" + user.ID + "'>" + user.name + " (" + user.ID +  ")</option>";
+                if (user.ID == 2) {
+                    optString += "<option value='" + user.ID + "' selected>" + user.name + " (" + user.ID + ")</option>";
+                } else {
+                    optString += "<option value='" + user.ID + "'>" + user.name + " (" + user.ID + ")</option>";
+
+                }
             });
             var that = this;
             $.sweetModal({
@@ -75,10 +79,14 @@ var app = new Vue({
             this.getDataPoint('userDashboard', 'userID', this.userID, false).then(function (response) {
                 if (response.data == "{ 'message':'no data' }") {
                     // neues Dashboard anlegen
-                    this.insertDataPoint({mode: 4, userID: this.userID, startup: 1}).then(function (response) {
+                    this.insertDataPoint({
+                        mode: 4,
+                        userID: this.userID,
+                        startup: 1
+                    }).then(function (response) {
                         this.dashboardID = Number(response.dashboardID);
                         this.dashID = this.dashboardID;
-                        this.$router.push('/' + this.dashboardID);  
+                        this.$router.push('/' + this.dashboardID);
                     })
                 } else {
                     Object(response.data).forEach(user => {
@@ -110,4 +118,3 @@ var app = new Vue({
         */
     }
 });
-

@@ -14,30 +14,27 @@ Vue.component('main-menu', {
     methods: {
         toggleMenu: function () {
             this.searchOpen = false;
-            if ($('.page-menu').css('left') != '0px')
-            {
+            if ($('.page-menu').css('left') != '0px') {
                 this.active = true;
                 // Animation open Menu
                 $('.page-menu').animate({
                     left: '0px'
-                } , 500);
+                }, 500);
                 $('#page-menu-open').addClass('is-active');
                 var filterVal = 'blur(4px)';
                 $('#content').css({
-                    'filter':filterVal,
-                    'webkitFilter':filterVal,
-                    'mozFilter':filterVal,
-                    'oFilter':filterVal,
-                    'msFilter':filterVal,
-                    'transition':'all 0.5s ease-out',
-                    '-webkit-transition':'all 0.5s ease-out',
-                    '-moz-transition':'all 0.5s ease-out',
-                    '-o-transition':'all 0.5s ease-out'
+                    'filter': filterVal,
+                    'webkitFilter': filterVal,
+                    'mozFilter': filterVal,
+                    'oFilter': filterVal,
+                    'msFilter': filterVal,
+                    'transition': 'all 0.5s ease-out',
+                    '-webkit-transition': 'all 0.5s ease-out',
+                    '-moz-transition': 'all 0.5s ease-out',
+                    '-o-transition': 'all 0.5s ease-out'
                 });
                 $('.page-menu-overlay').addClass('page-menu-overlay--set');
-            }
-            else
-            {
+            } else {
                 this.closeMenu();
             }
         },
@@ -45,26 +42,30 @@ Vue.component('main-menu', {
             // Animation back
             $('.page-menu').animate({
                 left: '-400px'
-            } , 500);
+            }, 500);
             $('#page-menu-open').removeClass('is-active');
             var filterVal = 'blur(0px)';
             $('#content').css({
-                'filter':filterVal,
-                'webkitFilter':filterVal,
-                'mozFilter':filterVal,
-                'oFilter':filterVal,
-                'msFilter':filterVal,
-                'transition':'all 0.5s ease-out',
-                '-webkit-transition':'all 0.5s ease-out',
-                '-moz-transition':'all 0.5s ease-out',
-                '-o-transition':'all 0.5s ease-out'
+                'filter': filterVal,
+                'webkitFilter': filterVal,
+                'mozFilter': filterVal,
+                'oFilter': filterVal,
+                'msFilter': filterVal,
+                'transition': 'all 0.5s ease-out',
+                '-webkit-transition': 'all 0.5s ease-out',
+                '-moz-transition': 'all 0.5s ease-out',
+                '-o-transition': 'all 0.5s ease-out'
             });
             $('.page-menu-overlay').removeClass('page-menu-overlay--set');
         },
         addDashboard: function () {
             this.addDashboardLoading = true;
             var that = this;
-            this.insertDataPoint({mode: '4', userID: String(this.$root.userID), startup: '0'}).then(function (response) {
+            this.insertDataPoint({
+                mode: '4',
+                userID: String(this.$root.userID),
+                startup: '0'
+            }).then(function (response) {
                 that.getDataPoint('dashboard', 'ID', response.data.dashboardID, false).then(function (response2) {
                     that.userDashboards.push(response2.data[0]);
                     that.addDashboardLoading = false;
@@ -72,12 +73,14 @@ Vue.component('main-menu', {
             });
         },
         searchDash: function () {
-            this.$router.push({ path: '/search/' + this.searchText});
+            this.$router.push({
+                path: '/search/' + this.searchText
+            });
             this.searchOpen = false;
         },
         switchDashboard: function () {
             this.$root.userDataLoaded = false;
-            
+
         }
     },
     mounted: function () {
@@ -92,7 +95,7 @@ Vue.component('main-menu', {
         }.bind(this));
     },
     watch: {
-        '$route' (to, from) {
+        '$route'(to, from) {
             if (this.active) {
                 this.toggleMenu();
             }
@@ -106,11 +109,17 @@ Vue.component('main-menu', {
                     <span class="hamburger-inner"></span>
                 </span>
             </button>
+
+
+            <!-- SUCHFELD (ausgeblendet)
             <div class="search-circle" :class="{ 'circle-extendet': searchOpen }">
                 <i v-if="searchOpen" class="material-icons search-icon" @click="searchOpen = !searchOpen">arrow_back</i>
                 <i v-else class="material-icons search-icon" @click="searchOpen = !searchOpen">search</i>
                 <input v-if="searchOpen" type="text" placeholder="Suche" class="search-form" @keyup.enter="searchDash" v-model="searchText" v-focus v-select>
             </div>
+            -->
+
+
         </div>
         <div class="page-menu">
             <center><span class="title-site" style="padding-left: 0px;">IMDash</span></center><br><br>

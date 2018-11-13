@@ -1,6 +1,6 @@
 Vue.component('modal-component', {
     props: ['themadata'],
-    data () {
+    data() {
         return {
             loading: false,
             presentationObject: {},
@@ -15,10 +15,9 @@ Vue.component('modal-component', {
             this.$root.viewModal = false;
         }
     },
-    created () {
-    },
+    created() {},
     watch: {
-        '$route' (to, from) {
+        '$route'(to, from) {
             if (this.$root.viewModal) {
                 this.closeModal();
             }
@@ -55,9 +54,9 @@ Vue.component('modal-component', {
                         <hr width="70%" align="left">
                         <div class="modal-column-head">Aufzeichnungen</div>
                         <div class="modal-column-list-container">
-                            <router-link class="modal-column-list-item" v-for="item in themadata.stream" :key="item.ID" v-on:click="closeModal" :to="{ path: '/stream/' + item.ID}">
+                            <a class="modal-column-list-item" v-for="item in themadata.stream" v-bind:href="item.link" target="_blank">
                                 <i class="material-icons">code</i> {{ item.name }}
-                            </router-link>
+                            </a>
                             <span v-if="themadata.stream.length == 0" class="modal-column-list-noentry"><br><br>Keine Streams vorhanden </span>
                         </div>
                     </div>
@@ -77,4 +76,4 @@ Vue.component('modal-component', {
         </div>
         <div class="modal-overlay" id="modal-overlay" v-on:click="closeModal"></div>
     </div>`
-  })
+})

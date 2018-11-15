@@ -7,8 +7,8 @@ Vue.component('exercise-solve', {
                 html: {},
                 css: {},
             },
-            url: 'https://codepen.io/Legend9/pen/yxMQqR?height=500&theme-id=light&default-tab=js,result',
-            embed: 'https://codepen.io/Legend9/embed/yxMQqR?default-tab=result',
+            url: 'https://codepen.io/negarjf/pen/MzwYGz?height=500&theme-id=light&default-tab=js,result',
+            embed: 'https://codepen.io/negarjf/embed/MzwYGz?default-tab=result',
             showExerciseModal: false,
             htmlcode: '',
         }
@@ -42,7 +42,7 @@ Vue.component('exercise-solve', {
         closeModal: function () {
             this.showExerciseModal = false;
             var invocation = new XMLHttpRequest();
-            var url = 'https://codepen.io/Legend9/pen/yxMQqR.html';
+            var url = 'https://codepen.io/negarjf/pen/MzwYGz.html';
             var that = this;
             if(invocation) {    
                 invocation.open('GET', url, true);

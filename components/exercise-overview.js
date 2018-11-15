@@ -166,7 +166,7 @@ Vue.component('exercise-overview', {
             </div>
 
             <div class="row">
-                <exercise-pagination v-if="exercises" :listData="getSortedExercises" :size="10" :categoryList="categorys"></exercise-pagination>
+                <exercise-pagination v-if="exercises" :listData="getSortedExercises" :size="2" :categoryList="categorys"></exercise-pagination>
             </div>
         </div>
     </div>    

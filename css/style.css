@@ -123,6 +123,7 @@ a:active {
     color: #444444;
     width: 100%;
     line-height: 10px;
+    overflow: auto;
 }
 
 .page-menu-title-icon {

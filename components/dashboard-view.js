@@ -4,13 +4,25 @@ Vue.component('dashboard-view', {
             dashID: 0,
             dashboardName: 'Name',
             notifications: [],
-            themen: { },
-            layouts: { },
-            components: { },
+            themen: {},
+            layouts: {},
+            components: {},
             cols: 10,
             breakpoint: "md",
-            breakpoints: { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 },
-            colsAll: { lg: 10, md: 8, sm: 6, xs: 4, xxs: 2 },
+            breakpoints: {
+                lg: 1200,
+                md: 996,
+                sm: 768,
+                xs: 480,
+                xxs: 0
+            },
+            colsAll: {
+                lg: 10,
+                md: 8,
+                sm: 6,
+                xs: 4,
+                xxs: 2
+            },
             themenAdd: [],
             renderThemenAdd: false,
             addTileWindow: false,
@@ -34,65 +46,75 @@ Vue.component('dashboard-view', {
 
             // Get Layout and Presentations
             axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
-            .then((response) => {
-                console.log(this.$root.dashboardID);
-                console.log(response);
-                // map themen
-                this.themen = response.data.themen;
-                // map layout
-                if (response.data.dashboard.layout == ''){
-                    var obj = {};
-                } else {
-                    var obj = JSON.parse(response.data.dashboard.layout);
-                }
-                if (jQuery.isEmptyObject(obj)) {
-                    
-                    this.layouts[this.breakpoint] = [ ];
-                    var t = 0;
-                    for (var them in this.themen) {
-                        var single = { x: 0, y: (t * this.themen[t].size), w: 2, h: 8, i: this.themen[t].ID};
-                        this.layouts[this.breakpoint].push(single);
-                        t++;
+                .then((response) => {
+                    console.log(this.$root.dashboardID);
+                    console.log(response);
+                    // map themen
+                    this.themen = response.data.themen;
+                    // map layout
+                    if (response.data.dashboard.layout == '') {
+                        var obj = {};
+                    } else {
+                        var obj = JSON.parse(response.data.dashboard.layout);
                     }
-                    this.layoutUpdatedEvent();
-                } else {
-                    this.layouts = obj;
-                }
-                var e = 0;
-                for (var them in this.themen) {
-                    this.components[this.themen[e].ID] = { i: this.themen[e].ID, component: "thema-tile", defaultSize: this.themen[e].size};
-                    e++;
-                }
-                // map Name
-                if (response.data.dashboard.name == undefined){
-                    this.dashboardName = "Kein Name"
-                } else {
-                    this.dashboardName = response.data.dashboard.name;
-                }
-                // Alle Daten gefüllt, rendere Layout
-                this.readyForRender = true;
-                this.tileRender = true;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                    if (jQuery.isEmptyObject(obj)) {
+
+                        this.layouts[this.breakpoint] = [];
+                        var t = 0;
+                        for (var them in this.themen) {
+                            var single = {
+                                x: 0,
+                                y: (t * this.themen[t].size),
+                                w: 2,
+                                h: 8,
+                                i: this.themen[t].ID
+                            };
+                            this.layouts[this.breakpoint].push(single);
+                            t++;
+                        }
+                        this.layoutUpdatedEvent();
+                    } else {
+                        this.layouts = obj;
+                    }
+                    var e = 0;
+                    for (var them in this.themen) {
+                        this.components[this.themen[e].ID] = {
+                            i: this.themen[e].ID,
+                            component: "thema-tile",
+                            defaultSize: this.themen[e].size
+                        };
+                        e++;
+                    }
+                    // map Name
+                    if (response.data.dashboard.name == undefined) {
+                        this.dashboardName = "Kein Name"
+                    } else {
+                        this.dashboardName = response.data.dashboard.name;
+                    }
+                    // Alle Daten gefüllt, rendere Layout
+                    this.readyForRender = true;
+                    this.tileRender = true;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
             //Get Themen
             this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
                 response.data.forEach(thema => {
-                    thema.hover=false;
+                    thema.hover = false;
                     thema.headstyle = {
                         backgroundColor: thema.priColor
                     }
                     this.themenAdd.push(thema);
                 });
-            }.bind(this));  
+            }.bind(this));
         },
         scrollHorizontal: function (e) {
             // TODO: Mit der Maus Horizontal scrollen funktioniert noch nicht.
             e = window.event || e;
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            $(this).scrollLeft -= (delta*40); // Multiplied by 40
+            $(this).scrollLeft -= (delta * 40); // Multiplied by 40
             e.preventDefault();
         },
         layoutUpdatedEvent: function () {
@@ -100,18 +122,18 @@ Vue.component('dashboard-view', {
             params.append('id', this.$root.dashboardID);
             params.append('layout', JSON.stringify(this.layouts));
             params.append('mode', 1);
-            axios.post(this.getAPIURL() + '/update.php', params)        
-            .then((response) => {
-                //console.log("Layoutupdate erfolgreich");
-                //console.log(response);
-            })
-            .catch(function (error) {
-                //console.log("Notizenupdate gescheitert");
-                //console.log(error);
-            });
+            axios.post(this.getAPIURL() + '/update.php', params)
+                .then((response) => {
+                    //console.log("Layoutupdate erfolgreich");
+                    //console.log(response);
+                })
+                .catch(function (error) {
+                    //console.log("Notizenupdate gescheitert");
+                    //console.log(error);
+                });
         },
         addTile: function (id, themenAddID) {
-            if (this.checkIfThemaExists(id)){
+            if (this.checkIfThemaExists(id)) {
                 this.$snotify.warning('Diese Lektion hast du schon hinzugefügt.');
             } else {
                 this.readyForRender = false;
@@ -123,8 +145,14 @@ Vue.component('dashboard-view', {
                         height = tempHeight;
                     }
                 }
-                this.layouts[this.breakpoint].push({ x: 0, y: height, w: 2, h: 8, i: id});
-                
+                this.layouts[this.breakpoint].push({
+                    x: 0,
+                    y: height,
+                    w: 2,
+                    h: 8,
+                    i: id
+                });
+
                 // themen füllen
                 //this.themen.push(this.themenAdd[themenAddID]);
                 //dB
@@ -133,23 +161,27 @@ Vue.component('dashboard-view', {
                 params.append('dashboard', this.$root.dashboardID);
                 params.append('thema', id);
                 axios.post(this.getAPIURL() + '/add.php', params)
-                .then(function (response) {
-                    axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
-                    .then((response) => {
-                        // map themen
-                        this.themen = response.data.themen;
-                        this.readyForRender = true;
-                        
-                        this.layoutUpdatedEvent();
-                    })
-                }.bind(this))
-                .catch(function (error) {
-                    console.log("ERROR - Add thema. Message:");
-                    console.log(error);
-                    this.$snotify.error('Leider gab es einen Fehler!');
-                }.bind(this));
+                    .then(function (response) {
+                        axios.get(this.getAPIURL() + '/get.php?mode=1&id=' + this.$root.dashboardID)
+                            .then((response) => {
+                                // map themen
+                                this.themen = response.data.themen;
+                                this.readyForRender = true;
 
-                this.components[id] = { i: id, component: "thema-tile", defaultSize: this.themenAdd[themenAddID].size};
+                                this.layoutUpdatedEvent();
+                            })
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.log("ERROR - Add thema. Message:");
+                        console.log(error);
+                        this.$snotify.error('Leider gab es einen Fehler!');
+                    }.bind(this));
+
+                this.components[id] = {
+                    i: id,
+                    component: "thema-tile",
+                    defaultSize: this.themenAdd[themenAddID].size
+                };
                 this.addTileWindow = false;
             }
         },
@@ -186,47 +218,80 @@ Vue.component('dashboard-view', {
             params.append('dashboard', this.$root.dashboardID);
             params.append('thema', id);
             axios.post(this.getAPIURL() + '/add.php', params)
-            .then(function (response) {
-                this.$snotify.success('Erfolgreich gelöscht.');
-                this.isDraggable = false;
-                this.readyForRender = true;
-            }.bind(this))
-            .catch(function (error) {
-                console.log("ERROR - Remove thema. Message:");
-                console.log(error);
-                this.$snotify.error('Leider gab es einen Fehler!');
-            }.bind(this));
+                .then(function (response) {
+                    this.$snotify.success('Erfolgreich gelöscht.');
+                    this.isDraggable = false;
+                    this.readyForRender = true;
+                }.bind(this))
+                .catch(function (error) {
+                    console.log("ERROR - Remove thema. Message:");
+                    console.log(error);
+                    this.$snotify.error('Leider gab es einen Fehler!');
+                }.bind(this));
             this.layoutUpdatedEvent();
-        },  
-        readyLayout() {
-          this.$refs.layout.initLayout();
         },
-        initLayout({layout, cols}) {
+        readyLayout() {
+            this.$refs.layout.initLayout();
+        },
+        initLayout({
+            layout,
+            cols
+        }) {
             this.cols = cols;
         },
-        initWidth({width}) {
+        initWidth({
+            width
+        }) {
             this.containerWidth = width;
         },
         onLayoutSwitched() {
             console.log('layouts switched')
         },
-        changeWidth({width, newCols}) {
+        changeWidth({
+            width,
+            newCols
+        }) {
             this.containerWidth = width;
             this.cols = newCols;
         },
-        updateLayout({layout, breakpoint}) {
+        updateLayout({
+            layout,
+            breakpoint
+        }) {
             let filtered;
-            filtered = layout.map( (item) => { return { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }})
+            filtered = layout.map((item) => {
+                return {
+                    x: item.x,
+                    y: item.y,
+                    w: item.w,
+                    h: item.h,
+                    i: item.i
+                }
+            })
             this.layouts[breakpoint] = filtered;
             this.layoutUpdatedEvent();
         },
-        changeBreakpoint({breakpoint, cols}) {
+        changeBreakpoint({
+            breakpoint,
+            cols
+        }) {
             this.cols = cols;
             this.breakpoint = breakpoint;
         },
-        changeLayout({layout, breakpoint}) {
+        changeLayout({
+            layout,
+            breakpoint
+        }) {
             let filtered;
-            filtered = layout.map( (item) => { return { x: item.x, y: item.y, w: item.w, h: item.h, i: item.i }})
+            filtered = layout.map((item) => {
+                return {
+                    x: item.x,
+                    y: item.y,
+                    w: item.w,
+                    h: item.h,
+                    i: item.i
+                }
+            })
             this.layouts[breakpoint] = filtered;
         },
         gridMode() {
@@ -235,8 +300,7 @@ Vue.component('dashboard-view', {
         listMode() {
             this.$refs.layout.resizeAllItems(true, false);
         },
-        resizedLayout() {
-        },
+        resizedLayout() {},
         checkIfThemaExists(id) {
             var exists = false;
             for (var them in this.themen) {
@@ -262,8 +326,15 @@ Vue.component('dashboard-view', {
             this.renderThemenAdd = true;
         },
         editDashboardName: function (old, newval) {
-            if(old === false){
-                this.updateDataPoint({table: 'dashboard', cell: 'name', val: this.dashboardName, whereCell: 'ID', whereVal: this.$root.dashboardID, mode: 99});
+            if (old === false) {
+                this.updateDataPoint({
+                    table: 'dashboard',
+                    cell: 'name',
+                    val: this.dashboardName,
+                    whereCell: 'ID',
+                    whereVal: this.$root.dashboardID,
+                    mode: 99
+                });
             }
         }
     },
@@ -282,13 +353,16 @@ Vue.component('dashboard-view', {
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <span class="title-site">IMDash</span>
-                    <span class="title-name" v-if="!editDashboardName" v-on:click="editDashboardName = !editDashboardName">{{dashboardName}} <i class="material-icons title-icon">create</i></span>
+                    <span class="title-name" v-if="!editDashboardName" v-on:click="editDashboardName = !editDashboardName" style="cursor: pointer;">{{dashboardName}} <i class="material-icons title-icon">create</i></span>
                     <span class="title-name" v-else><form v-on:submit.prevent="editDashboardName = !editDashboardName" class="title-form"><input type="text" name="dashboardName" v-model="dashboardName" class="title-form" v-on:focusout="editDashboardName = !editDashboardName" v-focus v-select></form></span>
                 </div>
                 <div class="col-sm-6 col-xs-12">
                     <notification-button></notification-button>
                     <button class="title-button float-right" v-on:click="addTileWindow = !addTileWindow"><i class="material-icons">add</i></button>
-                    <button class="title-button float-right" v-on:click="isDraggable = !isDraggable"><i class="material-icons">edit</i></button>
+                    <button class="title-button float-right" v-on:click="isDraggable = !isDraggable">
+                        <i class="material-icons" v-if="!isDraggable">edit</i>
+                        <i class="material-icons" v-else>check</i>
+                    </button>
                 </div>
             </div>
         </div>

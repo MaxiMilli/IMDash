@@ -12,7 +12,8 @@ BODY:       tile-body
 
 ------------------------------------------*/
 
-.grid-sizer { /* Ist für die Andordnung der Kacheln wichtig */
+.grid-sizer {
+    /* Ist für die Andordnung der Kacheln wichtig */
     width: 10%;
 }
 
@@ -36,7 +37,7 @@ BODY:       tile-body
 }
 
 .tile--spacing {
-    margin:10px;
+    margin: 10px;
 }
 
 .tile-xs {
@@ -54,16 +55,16 @@ BODY:       tile-body
 
 .tile-border--black {
     border-radius: 30px;
-    -webkit-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
-    -moz-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
-    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
+    -webkit-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
 }
 
 .tile-border--red {
     border-radius: 30px;
     -webkit-box-shadow: 0px 3px 8px 0px rgba(255, 0, 0, 0.16);
-    -moz-box-shadow: 0px 3px 8px 0px rgba(255,0,0,0.16);
-    box-shadow: 0px 3px 8px 0px rgba(255,0,0,0.16);
+    -moz-box-shadow: 0px 3px 8px 0px rgba(255, 0, 0, 0.16);
+    box-shadow: 0px 3px 8px 0px rgba(255, 0, 0, 0.16);
 }
 
 .tile.is-dragging,
@@ -71,7 +72,7 @@ BODY:       tile-body
     z-index: 5;
 }
 
-.tile10{
+.tile10 {
     width: 10%;
 }
 
@@ -106,7 +107,7 @@ BODY:       tile-body
 }
 
 .tile-move {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     width: 100%;
     height: 100%;
     display: block;
@@ -124,7 +125,17 @@ BODY:       tile-body
     cursor: pointer;
 }
 
-.tile-move-handle{
+.tile-move-handle {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tile-add-exists {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -150,9 +161,41 @@ BODY:       tile-body
     padding-right: 25px;
     color: #ffffff;
 
-    -webkit-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
-    -moz-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
-    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
+    -webkit-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+}
+
+.tile-add {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.tile-add-head {
+    width: 70%;
+    border-radius: 30px;
+    min-height: 50px;
+    padding: -20px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(168, 168, 168);
+    font-size: 18px;
+    z-index: 3;
+
+    padding-left: 25px;
+    padding-right: 25px;
+    color: #ffffff;
+
+    -webkit-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
 }
 
 .tile-body {
@@ -168,9 +211,9 @@ BODY:       tile-body
     padding-right: 25px;
     color: #444444;
 
-    -webkit-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
-    -moz-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
-    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.16);
+    -webkit-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.16);
     display: flex;
     flex-direction: row;
 }
@@ -182,10 +225,13 @@ BODY:       tile-body
     overflow: none;
     position: relative;
     display: flex;
-    flex-wrap: wrap; /* Optional. only if you want the items to wrap */
-    justify-content: center; /* For horizontal alignment */
-    align-items: center; /* For vertical alignment */
-} 
+    flex-wrap: wrap;
+    /* Optional. only if you want the items to wrap */
+    justify-content: center;
+    /* For horizontal alignment */
+    align-items: center;
+    /* For vertical alignment */
+}
 
 .tile-img img {
     width: 60%;
@@ -201,10 +247,13 @@ BODY:       tile-body
     overflow: none;
     position: relative;
     display: flex;
-    flex-wrap: wrap; /* Optional. only if you want the items to wrap */
-    justify-content: center; /* For horizontal alignment */
-    align-items: center; /* For vertical alignment */
-} 
+    flex-wrap: wrap;
+    /* Optional. only if you want the items to wrap */
+    justify-content: center;
+    /* For horizontal alignment */
+    align-items: center;
+    /* For vertical alignment */
+}
 
 .tile-img-prv img {
     width: 60%;
@@ -213,8 +262,29 @@ BODY:       tile-body
     transform: translate(0%, -50%);
 }
 
+.tile-add-img-prv {
+    margin: 0%;
+    width: 30%;
+    height: 100%;
+    overflow: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /* Optional. only if you want the items to wrap */
+    justify-content: center;
+    /* For horizontal alignment */
+    align-items: center;
+    /* For vertical alignment */
+}
+
+.tile-add-img-prv img {
+    width: 60%;
+    margin: 0;
+}
+
 .tile-buttons {
-    margin:0;
+    margin: 0;
     padding: 0;
     display: flex;
     height: 100%;
@@ -243,15 +313,15 @@ BODY:       tile-body
 }
 
 .tile-button-link-icon {
-    width:100%;
+    width: 100%;
 }
 
 .tile-b-l-radius {
-border-bottom-left-radius: 30px;
+    border-bottom-left-radius: 30px;
 }
 
 .tile-b-r-radius {
-border-bottom-right-radius: 30px;
+    border-bottom-right-radius: 30px;
 }
 
 .tile-info {

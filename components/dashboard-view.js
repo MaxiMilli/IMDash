@@ -376,6 +376,8 @@ Vue.component('dashboard-view', {
                             <div v-for="(thema, id) in themenAdd" v-if="renderThemenAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile(thema.ID, id)">
                                 <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
                                 </div>
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false && checkIfThemaExists(thema.ID)" style="background-color:rgba(255,255,255,0.5)">
+                                </div>
                                 <div class="tile-overlay" @mouseleave="thema.hover=false" v-if="thema.hover == true" style="background-color:rgba(255,255,255,0.5)">
                                     <div class="tile-move-handle" v-if="!checkIfThemaExists(thema.ID)">
                                         <i class="material-icons">add</i>
@@ -384,14 +386,11 @@ Vue.component('dashboard-view', {
                                         <i class="material-icons">close</i>
                                     </div>
                                 </div>
-                                <div class="tile-head" :style="thema.headstyle">{{thema.name}}</div>
-                                <div class="tile-body">
-                                    <div class="tile-img-prv">
-                                        <img :src="thema.bild">
+                                <div class="tile-add">
+                                    <div class="tile-add-img-prv">
+                                            <img :src="thema.bild">
                                     </div>
-                                    <div class="tile-buttons">
-                                        <p>Content</p>
-                                    </div>
+                                    <div class="tile-add-head" :style="thema.headstyle">{{thema.name}}</div>
                                 </div>
                             </div>
 

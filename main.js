@@ -23,6 +23,7 @@ let componentMixins = window.VueResponsiveGridLayout.GridItemComponentsMixins;
 
 Vue.component('vue-responsive-grid-layout', layout);
 Vue.component('vue-grid-item', item);
+Vue.component('star-rating', VueStarRating.default)
 
 var app = new Vue({
     router,
@@ -36,10 +37,10 @@ var app = new Vue({
         viewModal: false,
         viewModalData: {},
         modalID: 5,
-        dashID: 0, //Old id
         dashboardID: 0,
         userID: 0,
         userDataLoaded: false,
+        refreshPage: false
     },
     mounted: function () {
         this.getDataPoint('user', 'active', 1).then(function (response) {
@@ -85,36 +86,33 @@ var app = new Vue({
                         startup: 1
                     }).then(function (response) {
                         this.dashboardID = Number(response.dashboardID);
-                        this.dashID = this.dashboardID;
                         this.$router.push('/' + this.dashboardID);
+                        this.userDataLoaded = true;
                     })
                 } else {
                     Object(response.data).forEach(user => {
                         console.log(user);
                         if (user.startup == '1') {
                             this.dashboardID = user.dashboardID;
-                            this.dashID = this.dashboardID;
                             this.$router.push('/' + this.dashboardID);
                         }
                     });
+                    this.userDataLoaded = true;
                 }
             }.bind(this));
         },
-        dashboardID: function (old, neww) {
+        '$route' (old, fresh) {
             if (this.$router.currentRoute.name == 'home') {
-                console.log(this.$router);
-                console.log(this.$router.currentRoute);
-            }
-            this.userDataLoaded = true;
-        },
-        /*'$route' (old, fresh) {
-            if (this.dashID != this.$route.params.id) {
-                console.log(old,fresh);
+                console.log(old.params.id);
+                console.log(fresh.params.id);
+                var that = this;
                 this.userDataLoaded = false;
+                Vue.nextTick(function (){
+                    console.log("re-render");
+                    that.userDataLoaded = true;
+                })
                 this.dashboardID = this.$route.params.id;
-                this.dashID = this.$route.params.id;
             }
         }
-        */
     }
 });

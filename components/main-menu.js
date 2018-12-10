@@ -21,6 +21,7 @@ Vue.component('main-menu', {
                     left: '0px'
                 }, 500);
                 $('#page-menu-open').addClass('is-active');
+                $('.page-menu-overlay').addClass('page-menu-overlay--set');
                 var filterVal = 'blur(4px)';
                 $('#content').css({
                     'filter': filterVal,
@@ -33,17 +34,18 @@ Vue.component('main-menu', {
                     '-moz-transition': 'all 0.5s ease-out',
                     '-o-transition': 'all 0.5s ease-out'
                 });
-                $('.page-menu-overlay').addClass('page-menu-overlay--set');
             } else {
                 this.closeMenu();
             }
         },
         closeMenu: function () {
+            this.active = false;
             // Animation back
             $('.page-menu').animate({
                 left: '-400px'
             }, 500);
             $('#page-menu-open').removeClass('is-active');
+            $('.page-menu-overlay').removeClass('page-menu-overlay--set');
             var filterVal = 'blur(0px)';
             $('#content').css({
                 'filter': filterVal,
@@ -56,7 +58,6 @@ Vue.component('main-menu', {
                 '-moz-transition': 'all 0.5s ease-out',
                 '-o-transition': 'all 0.5s ease-out'
             });
-            $('.page-menu-overlay').removeClass('page-menu-overlay--set');
         },
         addDashboard: function () {
             this.addDashboardLoading = true;

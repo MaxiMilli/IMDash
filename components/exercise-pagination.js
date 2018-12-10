@@ -97,9 +97,9 @@ Vue.component('exercise-pagination', {
             <div class=" tile-excercise-level">
                 <p>Level {{ exercise.level }}</p>
             </div>
-            <button class="btn tile-exercise-button">
+            <router-link class="btn tile-exercise-button" :to="{ path: '/exercise/solve/' + exercise.ID}">
                 <p>Übung lösen</p>
-            </button>
+            </router-link>
         </div>
 
         <div class="tile-exercise-pagination">

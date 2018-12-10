@@ -65,7 +65,7 @@ Vue.component('exercise-solve', {
             });
         },
         placeExercise: function () {
-
+            router.push('exercise-rating')
         }
     },
     computed: {
@@ -87,7 +87,7 @@ Vue.component('exercise-solve', {
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
+        <div class="container">
             <div class="tile tile30 tile--spacing tile-border--black">
                 <div class="tile-head">
                     {{exercise.name}}
@@ -114,7 +114,7 @@ Vue.component('exercise-solve', {
                             Übung   
                                 <button class="btn btn-danger float-right" @click="closeModal">Schliessen</button>
                                 <button class="btn btn-light float-right" @click="showExercise">Aufgabe anzeigen</button>
-                                <button class="btn btn-success float-right" @click="placeExercise">Abgeben</button> 
+                                <router-link class="btn btn-success float-right" :to="{ path: '/exercise/rating/' + exercise.ID }">Abgeben</router-link> 
                         </div>
 
                         <div class="exercise-body">

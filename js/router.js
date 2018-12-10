@@ -28,6 +28,11 @@ const routes = [{
         name: 'exercise-solve'
     },
     {
+        path: '/exercise/rating/:id',
+        component: 'exercise-rating',
+        name: 'exercise-rating'
+    },
+    {
         path: '/search/:searchterm',
         component: 'search-view',
         name: 'search'

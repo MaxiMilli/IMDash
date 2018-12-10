@@ -230,7 +230,7 @@ BODY:       tile-body
     justify-content: center;
     left: 0%;
     height: 50%;
-    border: #ffffff solid 1px;
+    border-left: #ffffff solid 2px;
     border-top: none;
     color: #ffffff;
     text-align: center;

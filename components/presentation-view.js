@@ -66,6 +66,7 @@ Vue.component('presentation-view', {
             this.noteset[id].noteText = this.noteset[id].data[index];
         },
         getNotes: function () {
+            var that = this;
             axios.get(this.getAPIURL() + '/get.php?mode=3&id=' + this.$root.dashboardID + '&user=' + this.$root.userID)
             .then((response) => {
                 var $notesetToPush = [];
@@ -96,6 +97,22 @@ Vue.component('presentation-view', {
                 this.noteset = $notesetToPush;
             })
             .catch(function (error) {
+                var toPush = [];
+                toPush.push({
+                    notesID: 0,
+                    name: "Test",
+                    data: {'1': 'ydsfa'},
+                    allowEdit: true,
+                    currentlyNoteEdit: 0,
+                    noteText: '',
+                    visible: Number(1),
+                    style: {
+                        'background-color': '#556677'
+                    },
+                    sendActive: false,
+                });
+                that.noteset = toPush;
+                console.log(this.noteset);
                 console.log("ERROR - Get Notes. Message:");
                 console.log(error);
             });
@@ -272,7 +289,7 @@ Vue.component('presentation-view', {
 
                             <div id="share-notes" x-placement="bottom">
                                 <div class="share-notes-modal">
-                                    <h3> Notizensätze</h3>
+                                    <h3> Notizensätze </h3> <button class="btn btn-light" @click="">+</button>
                                     <div v-for="(noteSetName, id) in noteset">
                                         <p>
                                             Set: <b>{{ noteSetName.name }}</b>

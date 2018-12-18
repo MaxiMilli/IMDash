@@ -28,9 +28,33 @@ Vue.component('thema-tile', {
             this.$emit('delete-tile', this.data.ID);
         },
         openPresentation: function (e) {
-            console.log("presentation open");
-            console.log(e);
-            
+            if (this.data.presentations[0] == undefined) {
+                $.sweetModal('Keine Präsentationen vorhanden!');
+            } else {
+                this.$router.push('/presentation/' + this.data.presentations[0].ID);
+                console.log(this.data.presentations[0].ID);
+            }
+        },
+        openFolder: function (e) {
+            if (this.data.file[0] == undefined) {
+                $.sweetModal('Keine Dateien vorhanden!');
+            } else {
+                var file_path = this.data.file[0].link;
+                var a = document.createElement('A');
+                a.href = file_path;
+                a.download = file_path.substr(file_path.lastIndexOf('/') + 1);
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        },
+        openStream: function (e) {
+            if (this.data.stream[0] == undefined) {
+                $.sweetModal('Keinen Stream vorhanden!');
+            } else {
+                var win = window.open(this.data.stream[0].link, '_blank');
+                win.focus();
+            }
         }
     },
     watch: {

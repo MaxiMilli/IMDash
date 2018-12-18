@@ -10,22 +10,15 @@ Vue.component('thema-tile', {
             },
             colorSecundary: {
                 backgroundColor: ''
-            },
-            colorHover: {
-                color: '#f7f7f7'
-            },
-            activeB1: false,
-            activeB2: false,
-            activeB3: false
+            }
         }
     },
-    created () {
+    created() {
         //this.fetchData();
         //console.log(this.data);
         this.colorPrimary.backgroundColor = this.data.priColor;
         this.colorSecundary.backgroundColor = this.data.secColor;
-        this.colorHover.backgroundColor = this.data.secColor;
-    },  
+    },
     methods: {
         openModal: function () {
             this.$root.viewModal = true;

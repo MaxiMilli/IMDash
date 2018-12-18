@@ -311,8 +311,7 @@ BODY:       tile-body
 }
 
 .tile-button-link:hover {
-    background-color: rgb(228, 228, 228);
-    color: #ffffff;
+    opacity: 0.8;
 }
 
 .tile-button-link-icon {

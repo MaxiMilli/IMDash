@@ -117,7 +117,7 @@
 
 .exercise-body-bg {
     position: fixed;
-    z-index: 9998;
+    z-index: 93;
     top: 0;
     left: 0;
     width: 100%;
@@ -146,6 +146,11 @@
     width: 100%;
 }
 
+.exercise-rating {
+    display: flex;
+    align-content: center;
+}
+
 .panel {
     display: flex;
     flex-wrap: wrap;
@@ -160,7 +165,7 @@
     height: 50px;
     padding: -20px;
 
-    background-color: #FFEB3B;
+    background-color: gold;
     font-size: 18px;
     z-index: 3;
 

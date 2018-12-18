@@ -22,7 +22,7 @@ Vue.component('exercise-rating', {
             </div>
         </div>
         <div class="container">
-            <div class="row">
+            <div class="row exercise-rating">
                 <star-rating v-model="exerciseRating"></star-rating>
             </div>
         </div>

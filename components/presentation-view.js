@@ -100,14 +100,14 @@ Vue.component('presentation-view', {
                 var toPush = [];
                 toPush.push({
                     notesID: 0,
-                    name: "Test",
-                    data: {'1': 'ydsfa'},
+                    name: "Notizensatz xy",
+                    data: { },
                     allowEdit: true,
                     currentlyNoteEdit: 0,
                     noteText: '',
                     visible: Number(1),
                     style: {
-                        'background-color': '#556677'
+                        'background-color': '#E5E370'
                     },
                     sendActive: false,
                 });
@@ -133,7 +133,8 @@ Vue.component('presentation-view', {
               }
         },
         backupNotes: function (id) {
-            this.updateDataPoint({notesID: this.noteset[id].notesID, notes: JSON.stringify(this.noteset[id].data), mode: 2});
+            var that = this;
+            this.updateDataPoint({notesID: this.noteset[id].notesID, presentationID: this.$route.params.id, notes: JSON.stringify(this.noteset[id].data), mode: 2});
         },
         renderPDF: function () {
             // Get PDF-object
@@ -289,7 +290,7 @@ Vue.component('presentation-view', {
 
                             <div id="share-notes" x-placement="bottom">
                                 <div class="share-notes-modal">
-                                    <h3> Notizensätze </h3> <button class="btn btn-light" @click="">+</button>
+                                    <h3> Notizensätze </h3>
                                     <div v-for="(noteSetName, id) in noteset">
                                         <p>
                                             Set: <b>{{ noteSetName.name }}</b>

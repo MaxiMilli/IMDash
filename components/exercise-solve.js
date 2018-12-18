@@ -11,6 +11,7 @@ Vue.component('exercise-solve', {
             embed: 'https://codepen.io/negarjf/embed/MzwYGz?default-tab=result',
             showExerciseModal: false,
             htmlcode: '',
+            renderExercise: false
         }
     },
     mixins: [
@@ -19,7 +20,7 @@ Vue.component('exercise-solve', {
     mounted: function () {
         this.getDataPoint('exercise', 'ID', this.$route.params.id, false).then(function (response) {
             this.exercise = response.data[0];
-
+            this.renderExercise = true;
         }.bind(this));
 
         this.getDataPoint('exerciseCodebase', 'exerciseID', this.$route.params.id, false).then(function (response) {
@@ -65,13 +66,24 @@ Vue.component('exercise-solve', {
             });
         },
         placeExercise: function () {
-            router.push('exercise-rating')
+            this.$router.push('/exercise/rating/' + this.exercise.ID )
+            //:to="{ path: '/exercise/rating/' + exercise.ID }
+        },
+        saveCode: function () {
+
         }
     },
     computed: {
         getEmbedUrl: function () {
-            //return this.url.replace('pen', 'embed');
-            return this.url;
+            var tempurl = this.exercise.link;
+            var embed = tempurl.replace('/pen', '/embed');
+            embed += '?default-tab=result';
+            return embed;
+        },
+        getPenUrl: function () {
+            var tempurl = this.exercise.link;
+            tempurl += '?theme-id=light&default-tab=js,result';
+            return this.exercise.link;
         }
     },
     template: `
@@ -81,55 +93,37 @@ Vue.component('exercise-solve', {
                 <span class="title-site">IMDash</span>
                 <span class="title-name">Übungen</span>
             </div>
-<<<<<<< HEAD
-        </div>
-        <div class="container">
-            <div class="tile tile30 tile--spacing tile-border--black">
-                <div class="tile-head">
-                    {{exercise.name}}
-                </div>
-
-                <div class="tile-body">
-                    {{exercise.content}}
-                </div>
-=======
             <div class="col-sm-6 col-xs-12">
                 <notification-button></notification-button>                    
->>>>>>> 11d8f828d81f2a6701d08a6854da8ff51223c238
             </div>
         </div>
 
-<<<<<<< HEAD
-                <div class="tile-body flex" style="height: 500px;">
-                <p>{{ htmlcode }}</p>
-                    <p><button class="btn btn-light" @click="showExerciseModal = true">Übung öffnen</button><br></p><br>
-                    <iframe :src="embed" class="exercise-preview-iframe"></iframe>
-                    
-                    <!--<iframe height='265' scrolling='no' title='Deformation' :src="[getEmbedUrl + '?height=265&theme-id=light&default-tab=js,result']" frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Mertl/pen/pxQzWb/'>Deformation</a> by Michal (<a href='https://codepen.io/Mertl'>@Mertl</a>) on <a href='https://codepen.io'>CodePen</a>.
-                    </iframe>-->
-                    <div class="exercise-body-bg" v-if="showExerciseModal">
-                        <div class="tile-head" style="height: 65px;">
-                            Übung   
-                                <button class="btn btn-danger float-right" @click="closeModal">Schliessen</button>
-                                <button class="btn btn-light float-right" @click="showExercise">Aufgabe anzeigen</button>
-                                <router-link class="btn btn-success float-right" :to="{ path: '/exercise/rating/' + exercise.ID }">Abgeben</router-link> 
-                        </div>
-=======
         <div class="row">
-            <hr>
-        </div>
->>>>>>> 11d8f828d81f2a6701d08a6854da8ff51223c238
-
-        <div class="row">
-            <div class="col-12">
+            <div class="col-12" v-if="renderExercise">
                 <div class="panel tile-border--black">
                     <div class="tile-head">
                         {{exercise.name}}
                     </div>
                     <div class="tile-body column">
                         {{exercise.content}}
+                        <iframe :src="getEmbedUrl" class="exercise-preview-iframe"></iframe>
                         <br>
                         <button class="btn-excercise-solve" @click="showExerciseModal = true"><p>Übung lösen!</p></button>
+                    </div>
+                </div>
+                <div class="" style="height: 500px;">
+                    <div class="exercise-body-bg" v-if="showExerciseModal">
+                        <div class="tile-head" style="height: 65px;">
+                            Übung   
+                                <button class="btn btn-danger float-right" @click="closeModal">Schliessen</button>
+                                <button class="btn btn-light float-right" @click="showExercise">Aufgabe anzeigen</button>
+                                <button class="btn btn-success float-right" @click="placeExercise">Abgeben</button> 
+                        </div>
+                        <div class="exercise-body" style="height: 80%;">
+                            <iframe height='265' scrolling='no' title='Deformation' :src="getPenUrl" frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%; height: 80vh'>
+                                See the Pen <a href='https://codepen.io/Mertl/pen/pxQzWb/'>Deformation</a> by Michal (<a href='https://codepen.io/Mertl'>@Mertl</a>) on <a href='https://codepen.io'>CodePen</a>.
+                            </iframe>
+                        </div>
                     </div>
                 </div>
             </div>

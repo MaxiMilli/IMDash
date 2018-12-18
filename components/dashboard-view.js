@@ -23,10 +23,16 @@ Vue.component('dashboard-view', {
                 xs: 4,
                 xxs: 2
             },
-            themenAdd: [],
             calendarAdd: [],
-            renderThemenAdd: false,
+            dashboardAdd: [],
+            linkAdd: [],
+            systemAdd: [],
+            themenAdd: [],
             renderCalendarAdd: false,
+            renderDashboardAdd: false,
+            renderLinkAdd: false,
+            renderSystemAdd: false,
+            renderThemenAdd: false,
             addTileWindow: false,
             isDraggable: false,
             readyForRender: false,
@@ -101,18 +107,7 @@ Vue.component('dashboard-view', {
                     console.log(error);
                 });
 
-            //Get Themen
-            this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
-                response.data.forEach((thema) => {
-                    thema.hover = false;
-                    thema.headstyle = {
-                        backgroundColor: thema.priColor
-                    }
-                    this.themenAdd.push(thema);
-                });
-            }.bind(this));
-
-            //Get Calendar
+            //Get Calendars
             this.getDataPoint('thema', 'category', 'CALENDAR', true).then(function (response) {
                 response.data.forEach((cal) => {
                     cal.hover = false;
@@ -120,7 +115,50 @@ Vue.component('dashboard-view', {
                         backgroundColor: cal.priColor
                     }
                     this.calendarAdd.push(cal);
-                    console.log(cal);
+                });
+            }.bind(this));
+
+            //Get Dashboards
+            this.getDataPoint('thema', 'category', 'DASHBOARD', true).then(function (response) {
+                response.data.forEach((dash) => {
+                    dash.hover = false;
+                    dash.headstyle = {
+                        backgroundColor: dash.priColor
+                    }
+                    this.dashboardAdd.push(dash);
+                });
+            }.bind(this));
+
+            //Get Links
+            this.getDataPoint('thema', 'category', 'LINK', true).then(function (response) {
+                response.data.forEach((link) => {
+                    link.hover = false;
+                    link.headstyle = {
+                        backgroundColor: link.priColor
+                    }
+                    this.linkAdd.push(link);
+                });
+            }.bind(this));
+
+            //Get Systems
+            this.getDataPoint('thema', 'category', 'SYSTEM', true).then(function (response) {
+                response.data.forEach((system) => {
+                    system.hover = false;
+                    system.headstyle = {
+                        backgroundColor: system.priColor
+                    }
+                    this.systemAdd.push(system);
+                });
+            }.bind(this));
+
+            //Get Themes
+            this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
+                response.data.forEach((thema) => {
+                    thema.hover = false;
+                    thema.headstyle = {
+                        backgroundColor: thema.priColor
+                    }
+                    this.themenAdd.push(thema);
                 });
             }.bind(this));
         },
@@ -336,11 +374,20 @@ Vue.component('dashboard-view', {
         }
     },
     watch: {
-        themenAdd: function () {
-            this.renderThemenAdd = true;
-        },
         calendarAdd: function () {
             this.renderCalendarAdd = true;
+        },
+        dashboardAdd: function () {
+            this.renderDashboardAdd = true;
+        },
+        linkAdd: function () {
+            this.renderLinkAdd = true;
+        },
+        systemAdd: function () {
+            this.renderSystemAdd = true;
+        },
+        themenAdd: function () {
+            this.renderThemenAdd = true;
         },
         editDashboardName: function (old, newval) {
             if (old === false) {
@@ -438,15 +485,76 @@ Vue.component('dashboard-view', {
 
                         <div class="add-tile-column">
                             <div class="page-menu-title">links</div>
+                            <div v-for="(thema, id) in linkAdd" v-if="renderLinkAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile(thema.ID, id)">
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
+                                </div>
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false && checkIfThemaExists(thema.ID)" style="background-color:rgba(255,255,255,0.5)">
+                                </div>
+                                <div class="tile-overlay" @mouseleave="thema.hover=false" v-if="thema.hover == true" style="background-color:rgba(255,255,255,0.5)">
+                                    <div class="tile-move-handle" v-if="!checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">add</i>
+                                    </div>
+                                    <div class="tile-move-handle" v-if="checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">close</i>
+                                    </div>
+                                </div>
+                                <div class="tile-add">
+                                    <div class="tile-add-img-prv">
+                                            <img :src="thema.bild">
+                                    </div>
+                                    <div class="tile-add-head" :style="thema.headstyle">{{thema.name}}</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="add-tile-column">
-                            <div class="page-menu-title">dashboards</div>   
+                            <div class="page-menu-title">dashboards</div>
+                            <div v-for="(thema, id) in dashboardAdd" v-if="renderDashboardAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile(thema.ID, id)">
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
+                                </div>
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false && checkIfThemaExists(thema.ID)" style="background-color:rgba(255,255,255,0.5)">
+                                </div>
+                                <div class="tile-overlay" @mouseleave="thema.hover=false" v-if="thema.hover == true" style="background-color:rgba(255,255,255,0.5)">
+                                    <div class="tile-move-handle" v-if="!checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">add</i>
+                                    </div>
+                                    <div class="tile-move-handle" v-if="checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">close</i>
+                                    </div>
+                                </div>
+                                <div class="tile-add">
+                                    <div class="tile-add-img-prv">
+                                            <img :src="thema.bild">
+                                    </div>
+                                    <div class="tile-add-head" :style="thema.headstyle">{{thema.name}}</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="add-tile-column">
                             <div class="page-menu-title">system</div>
+                            <div v-for="(thema, id) in systemAdd" v-if="renderSystemAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile(thema.ID, id)">
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
+                                </div>
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false && checkIfThemaExists(thema.ID)" style="background-color:rgba(255,255,255,0.5)">
+                                </div>
+                                <div class="tile-overlay" @mouseleave="thema.hover=false" v-if="thema.hover == true" style="background-color:rgba(255,255,255,0.5)">
+                                    <div class="tile-move-handle" v-if="!checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">add</i>
+                                    </div>
+                                    <div class="tile-move-handle" v-if="checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">close</i>
+                                    </div>
+                                </div>
+                                <div class="tile-add">
+                                    <div class="tile-add-img-prv">
+                                            <img :src="thema.bild">
+                                    </div>
+                                    <div class="tile-add-head" :style="thema.headstyle">{{thema.name}}</div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

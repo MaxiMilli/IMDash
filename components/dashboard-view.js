@@ -24,7 +24,9 @@ Vue.component('dashboard-view', {
                 xxs: 2
             },
             themenAdd: [],
+            calendarAdd: [],
             renderThemenAdd: false,
+            renderCalendarAdd: false,
             addTileWindow: false,
             isDraggable: false,
             readyForRender: false,
@@ -101,12 +103,24 @@ Vue.component('dashboard-view', {
 
             //Get Themen
             this.getDataPoint('thema', 'category', 'THEME', true).then(function (response) {
-                response.data.forEach(thema => {
+                response.data.forEach((thema) => {
                     thema.hover = false;
                     thema.headstyle = {
                         backgroundColor: thema.priColor
                     }
                     this.themenAdd.push(thema);
+                });
+            }.bind(this));
+
+            //Get Calendar
+            this.getDataPoint('thema', 'category', 'CALENDAR', true).then(function (response) {
+                response.data.forEach((cal) => {
+                    cal.hover = false;
+                    cal.headstyle = {
+                        backgroundColor: cal.priColor
+                    }
+                    this.calendarAdd.push(cal);
+                    console.log(cal);
                 });
             }.bind(this));
         },
@@ -325,6 +339,9 @@ Vue.component('dashboard-view', {
         themenAdd: function () {
             this.renderThemenAdd = true;
         },
+        calendarAdd: function () {
+            this.renderCalendarAdd = true;
+        },
         editDashboardName: function (old, newval) {
             if (old === false) {
                 this.updateDataPoint({
@@ -370,9 +387,9 @@ Vue.component('dashboard-view', {
             <div class="container-fluid" v-if="addTileWindow">
                 <div class="row hide-add-tile">
                     <div class="add-tile-section" v-on:scroll="scrollHorizontal">
+                        
                         <div class="add-tile-column">
                             <div class="page-menu-title">themen</div>
-
                             <div v-for="(thema, id) in themenAdd" v-if="renderThemenAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile(thema.ID, id)">
                                 <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
                                 </div>
@@ -393,22 +410,42 @@ Vue.component('dashboard-view', {
                                     <div class="tile-add-head" :style="thema.headstyle">{{thema.name}}</div>
                                 </div>
                             </div>
+                        </div>
 
-                        </div>
                         <div class="add-tile-column">
-                            <div class="page-menu-title">themen</div>  
+                            <div class="page-menu-title">kalender</div>
+                            <div v-for="(thema, id) in calendarAdd" v-if="renderCalendarAdd" class="tile-xs tile100-preview tile-border--black" @click="addTile(thema.ID, id)">
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false" style="background-color:rgba(255,255,255,0.0)">
+                                </div>
+                                <div class="tile-overlay" @mouseenter="thema.hover=true" v-if="thema.hover == false && checkIfThemaExists(thema.ID)" style="background-color:rgba(255,255,255,0.5)">
+                                </div>
+                                <div class="tile-overlay" @mouseleave="thema.hover=false" v-if="thema.hover == true" style="background-color:rgba(255,255,255,0.5)">
+                                    <div class="tile-move-handle" v-if="!checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">add</i>
+                                    </div>
+                                    <div class="tile-move-handle" v-if="checkIfThemaExists(thema.ID)">
+                                        <i class="material-icons">close</i>
+                                    </div>
+                                </div>
+                                <div class="tile-add">
+                                    <div class="tile-add-img-prv">
+                                            <img :src="thema.bild">
+                                    </div>
+                                    <div class="tile-add-head" :style="thema.headstyle">{{thema.name}}</div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="add-tile-column">
-                            <div class="page-menu-title">themen</div>
+                            <div class="page-menu-title">links</div>
                         </div>
+
                         <div class="add-tile-column">
-                            <div class="page-menu-title">themen</div>   
+                            <div class="page-menu-title">dashboards</div>   
                         </div>
+
                         <div class="add-tile-column">
-                            <div class="page-menu-title">themen</div>
-                        </div>
-                        <div class="add-tile-column">
-                            <div class="page-menu-title">themen</div>   
+                            <div class="page-menu-title">system</div>
                         </div>
                     </div>
                 </div>
@@ -457,6 +494,14 @@ Vue.component('dashboard-view', {
                             :height-from-children="true"
                             :can-be-resized-with-all="true">
                                 <thema-tile
+                                    v-if="getThemaData(item.i).category == 'THEME'"
+                                    :id="item.i"
+                                    :data="getThemaData(item.i)"
+                                    :edit="isDraggable"
+                                    @delete-tile="deleteTile">
+                                </thema-tile>
+                                <thema-tile
+                                    v-if="getThemaData(item.i).category == 'CALENDAR'"
                                     :id="item.i"
                                     :data="getThemaData(item.i)"
                                     :edit="isDraggable"

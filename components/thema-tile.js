@@ -10,7 +10,13 @@ Vue.component('thema-tile', {
             },
             colorSecundary: {
                 backgroundColor: ''
-            }
+            },
+            colorHover: {
+                color: '#f7f7f7'
+            },
+            activeB1: false,
+            activeB2: false,
+            activeB3: false
         }
     },
     created () {
@@ -18,6 +24,7 @@ Vue.component('thema-tile', {
         //console.log(this.data);
         this.colorPrimary.backgroundColor = this.data.priColor;
         this.colorSecundary.backgroundColor = this.data.secColor;
+        this.colorHover.backgroundColor = this.data.secColor;
     },  
     methods: {
         openModal: function () {
@@ -26,13 +33,18 @@ Vue.component('thema-tile', {
         },
         deleteTile: function () {
             this.$emit('delete-tile', this.data.ID);
+        },
+        openPresentation: function (e) {
+            console.log("presentation open");
+            console.log(e);
+            
         }
     },
     watch: {
         'edit': function () {
             
         },
-    },
+    },   
     template: `
     <div class="tile tile100 tile-border--black" id="tile-html">
         <div class="tile-move bar" v-show="edit">
@@ -48,13 +60,13 @@ Vue.component('thema-tile', {
             <img id="thema-title-image" :src="data.bild">
         </div>
         <div class="tile-buttons">
-            <div class="tile-button-link tile-b-l-radius" v-bind:style="colorSecundary">
+            <div @click="openPresentation" @mouseover="activeB1 = !activeB1" :class="{ activeB1: colorHover }" class=" tile-button-link tile-b-l-radius" v-bind:style="colorSecundary">
                 <i class="material-icons tile-button-link-icon">tv</i>
             </div>
-            <div class="tile-button-link" v-bind:style="colorSecundary">
+            <div v-bind:style="colorSecundary" @mouseover="activeB2 = !activeB2" :class="{ activeB2: colorHover }" class="tile-button-link">
                 <i class="material-icons tile-button-link-icon">folder_open</i>
             </div>
-            <div class="tile-button-link tile-b-r-radius" v-bind:style="colorSecundary">
+            <div v-bind:style="colorSecundary" @mouseover="activeB3 = !activeB3" :class="{ activeB3: colorHover }" class="tile-button-link tile-b-r-radius">
                 <i class="material-icons tile-button-link-icon">tap_and_play</i>
             </div>
         </div>

@@ -493,20 +493,41 @@ Vue.component('dashboard-view', {
                             :is-resizable="isDraggable"
                             :height-from-children="true"
                             :can-be-resized-with-all="true">
-                                <thema-tile
-                                    v-if="getThemaData(item.i).category == 'THEME'"
-                                    :id="item.i"
-                                    :data="getThemaData(item.i)"
-                                    :edit="isDraggable"
-                                    @delete-tile="deleteTile">
-                                </thema-tile>
-                                <thema-tile
+                                <tile-calendar
                                     v-if="getThemaData(item.i).category == 'CALENDAR'"
                                     :id="item.i"
                                     :data="getThemaData(item.i)"
                                     :edit="isDraggable"
                                     @delete-tile="deleteTile">
-                                </thema-tile>
+                                </tile-calendar>
+                                <tile-dashboard
+                                    v-if="getThemaData(item.i).category == 'DASHBOARD'"
+                                    :id="item.i"
+                                    :data="getThemaData(item.i)"
+                                    :edit="isDraggable"
+                                    @delete-tile="deleteTile">
+                                </tile-dashboard>
+                                <tile-link
+                                    v-if="getThemaData(item.i).category == 'LINK'"
+                                    :id="item.i"
+                                    :data="getThemaData(item.i)"
+                                    :edit="isDraggable"
+                                    @delete-tile="deleteTile">
+                                </tile-link>
+                                <tile-system
+                                    v-if="getThemaData(item.i).category == 'SYSTEM'"
+                                    :id="item.i"
+                                    :data="getThemaData(item.i)"
+                                    :edit="isDraggable"
+                                    @delete-tile="deleteTile">
+                                </tile-system>
+                                <tile-theme
+                                    v-if="getThemaData(item.i).category == 'THEME'"
+                                    :id="item.i"
+                                    :data="getThemaData(item.i)"
+                                    :edit="isDraggable"
+                                    @delete-tile="deleteTile">
+                                </tile-theme>
                             </vue-grid-item>
                         </template>
                     </vue-responsive-grid-layout> 

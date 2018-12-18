@@ -1,7 +1,7 @@
-Vue.component('thema-tile', {
+Vue.component('tile-calendar', {
     inheritAttrs: false,
     props: ['data', 'edit'],
-    data () {
+    data() {
         return {
             tname: null,
             imageURL: '',
@@ -59,9 +59,9 @@ Vue.component('thema-tile', {
     },
     watch: {
         'edit': function () {
-            
+
         },
-    },   
+    },
     template: `
     <div class="tile tile100 tile-border--black" id="tile-html">
         <div class="tile-move bar" v-show="edit">

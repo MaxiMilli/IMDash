@@ -60,13 +60,13 @@ Vue.component('thema-tile', {
             <img id="thema-title-image" :src="data.bild">
         </div>
         <div class="tile-buttons">
-            <div @click="openPresentation" @mouseover="activeB1 = !activeB1" :class="{ activeB1: colorHover }" class=" tile-button-link tile-b-l-radius" v-bind:style="colorSecundary">
+            <div @click="openPresentation" class=" tile-button-link tile-b-l-radius" v-bind:style="colorSecundary">
                 <i class="material-icons tile-button-link-icon">tv</i>
             </div>
-            <div v-bind:style="colorSecundary" @mouseover="activeB2 = !activeB2" :class="{ activeB2: colorHover }" class="tile-button-link">
+            <div @click="openFolder" v-bind:style="colorSecundary" class="tile-button-link">
                 <i class="material-icons tile-button-link-icon">folder_open</i>
             </div>
-            <div v-bind:style="colorSecundary" @mouseover="activeB3 = !activeB3" :class="{ activeB3: colorHover }" class="tile-button-link tile-b-r-radius">
+            <div @click="openStream" v-bind:style="colorSecundary" class="tile-button-link tile-b-r-radius">
                 <i class="material-icons tile-button-link-icon">tap_and_play</i>
             </div>
         </div>

@@ -8,6 +8,12 @@ Vue.component('exercise-rating', {
         toggleMenu: function () {
         },
     },
+    watch: {
+        exerciseRating: function () {
+            this.$snotify.success('Danke für die Bewertung!');
+            this.$router.push('/exercises/overview');
+        }
+    },
     template: `
     <div class="dashboard-view">
         <div class="container">
@@ -23,15 +29,17 @@ Vue.component('exercise-rating', {
         </div>
         <div class="container">
             <div class="row exercise-rating">
-                <star-rating v-model="exerciseRating"></star-rating>
                 <div class="col-12">
-                    <div class="panel tile-border--black">
+                    <div class="panel tile-border--gold">
                         <div class="tile-head">
                             Rating
                         </div>
                         <div class="tile-body column">
                             <p>Bitte bewerte die Schwierigkeit der Übung. War die Übung schwierig?</p>
                             <star-rating v-model="exerciseRating"></star-rating>
+                            <br>
+                            <br>
+                            <br>
                         </div>
                     </div>
                 </div>

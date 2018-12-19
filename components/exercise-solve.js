@@ -4,11 +4,13 @@ Vue.component('exercise-solve', {
             exercise: [],
             codeBase: {
                 javascript: {},
+                js_t: false,
                 html: {},
+                html_t: false,
                 css: {},
+                css_t: false,
             },
             url: 'https://codepen.io/negarjf/pen/MzwYGz?height=500&theme-id=light&default-tab=js,result',
-            embed: 'https://codepen.io/negarjf/embed/MzwYGz?default-tab=result',
             showExerciseModal: false,
             htmlcode: '',
             renderExercise: false
@@ -51,7 +53,7 @@ Vue.component('exercise-solve', {
                     if (invocation.readyState == 4) {
                         if (invocation.status == 200) {
                             var data = invocation.responseText;
-                            that.htmlcode = data;
+                            that.codeBase.html = data;
                         }
                     }
                     //this.htmlcode = invocation.htmlcode;
@@ -66,11 +68,81 @@ Vue.component('exercise-solve', {
             });
         },
         placeExercise: function () {
-            this.$router.push('/exercise/rating/' + this.exercise.ID )
-            //:to="{ path: '/exercise/rating/' + exercise.ID }
-        },
-        saveCode: function () {
+            
+            // Save code
 
+            var invocation = new XMLHttpRequest();
+            var url = this.exercise.link + '.html';
+            var that = this;
+            if (invocation) {
+                invocation.open('GET', url, true);
+                invocation.onreadystatechange = function (val) {
+                    if (invocation.readyState == 4) {
+                        if (invocation.status == 200) {
+                            var data = invocation.responseText;
+                            that.codeBase.html = data;
+                            that.codeBase.html_t = true;
+                            that.updateDB();
+                        }
+                    }
+                    //this.htmlcode = invocation.htmlcode;
+                };
+                invocation.send();
+            }
+
+            var invocation2 = new XMLHttpRequest();
+            var url = this.exercise.link + '.css';
+            var that = this;
+            if (invocation2) {
+                invocation2.open('GET', url, true);
+                invocation2.onreadystatechange = function (val) {
+                    if (invocation2.readyState == 4) {
+                        if (invocation2.status == 200) {
+                            var data = invocation2.responseText;
+                            that.codeBase.css = data;
+                            that.codeBase.css_t = true;
+                            that.updateDB();
+                        }
+                    }
+                    //this.htmlcode = invocation.htmlcode;
+                };
+                invocation2.send();
+            }
+
+            var invocation3 = new XMLHttpRequest();
+            var url = this.exercise.link + '.js';
+            var that = this;
+            if (invocation3) {
+                invocation3.open('GET', url, true);
+                invocation3.onreadystatechange = function (val) {
+                    if (invocation3.readyState == 4) {
+                        if (invocation3.status == 200) {
+                            var data = invocation3.responseText;
+                            that.codeBase.javascript = data;
+                            that.codeBase.js_t = true;
+                            that.updateDB();
+                        }
+                    }
+                    //this.htmlcode = invocation.htmlcode;
+                };
+                invocation3.send();
+            }
+        },
+        updateDB: function () {
+            if (this.codeBase.html_t === true && this.codeBase.js_t === true && this.codeBase.css_t === true) {
+                console.log("update Table");
+                this.updateDataPoint({
+                    mode: 3,
+                    userID: this.$root.userID,
+                    exerciseID: this.$route.params.id,
+                    html: this.codeBase.html,
+                    css: this.codeBase.css,
+                    js: this.codeBase.javascript
+                });
+
+                // Push Page to Rating
+                this.$router.push('/exercise/rating/' + this.exercise.ID )
+            }
         }
     },
     computed: {

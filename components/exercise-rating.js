@@ -24,6 +24,17 @@ Vue.component('exercise-rating', {
         <div class="container">
             <div class="row exercise-rating">
                 <star-rating v-model="exerciseRating"></star-rating>
+                <div class="col-12">
+                    <div class="panel tile-border--black">
+                        <div class="tile-head">
+                            Rating
+                        </div>
+                        <div class="tile-body column">
+                            <p>Bitte bewerte die Schwierigkeit der Übung. War die Übung schwierig?</p>
+                            <star-rating v-model="exerciseRating"></star-rating>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

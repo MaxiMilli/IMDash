@@ -1,8 +1,4 @@
-<p><style>
-  .imageShadow {
-    box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);
-  }
-</style></p>
+<style>.imageShadow {box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);}</style>
 
 # IMDash
 > Das IMDash ist eine ergänzende E-Learning Plattform zu Moodle den Unterricht der 'Interaktiven Medien' noch interaktiver zu gestalten.

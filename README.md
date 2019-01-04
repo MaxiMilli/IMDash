@@ -12,7 +12,7 @@ Dieses Tool wurde während der Major-Ausbildung im Studiengang Multimedia Produc
 Das Projekt hat einen insgesamten Wert von 8 ECTS von zwei Studierenden.
 
 <p align="center" style="width: 100%; align: left;">
-  <img alt="Prototyp des IMDash" src="img/IMDash.png" style="width: 80%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);" class="imageShadow">
+  <img alt="Prototyp des IMDash" src="img/IMDash.png" style="width: 80%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);">
 </p>
 
 ## Konzept
@@ -25,12 +25,41 @@ Das Projekt hat einen insgesamten Wert von 8 ECTS von zwei Studierenden.
 Das IMDash ist eine Single Page Application (SPA) die komplett in der Laufzeit des lokalen Browsers ausgeführt wird. Die grobe Struktur sieht wiefolgt aus:
 
 <p align="center" style="width: 100%; align: center;">
-  <img alt="Prototyp des IMDash" src="img/structure.png" style="width: 40%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);"  class="imageShadow">
+  <img alt="Prototyp des IMDash" src="img/structure.png" style="width: 40%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);">
 </p>
 
 ## Aufbau Applikation
+In Vue.js wird mit Komponenten Code modularisiert. Um einen Überblick zu haben, wie die einzelnen Komponenten aufeinander aufbauen haben wir das in einer Grafik visualisiert:
 
+<p align="center" style="width: 100%; align: center;">
+  <img alt="Prototyp des IMDash" src="img/aufbau.png" style="width: 80%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);">
+</p>
 
+## Komponenten
+Auf die wichtigsten Komponenten gehen wir hier kurz ein.
+
+### Dashboard
+Diese Komponente hat mehrere Funktionen (was wir im Nachhinein gerne verhindert hätten.):
+- Dashboard-Frame anzeigen
+- Kacheln hinzufügen
+- Responsive Grid anzeigen
+- Kachel einbinden
+
+Beim Aufruf werden verschiedenste Abfragen zum Server gestartet: Es wird das aktuelle Layout, die einzelnen Kacheln für das Dashboard und alle Daten für das Hinzufügen einer Kachel (also alle möglichen Kacheln) geladen. Anschliessend wird das Raster initialisiert, sobald diese alle Abfragen zurückgekommen sind (mit einem Watcher). Sobald das Flag gesetzt wird wird der ganze Inhalt gerendert.
+
+> Das Modalfenster wird global geladen und nicht beim Dashboard-Aufruf. Es ist theoretisch auf jeder Seite aufrufbar.
+
+Diese Komponente verfügt noch über weitere Funktionen wie das neu Anordnen der Kacheln und das Hinzufügen/Löschen.
+
+### Menu
+Das Menu hat im Verlaufe der Zeit das State-Management für das aktuelle Dashboard übernommen. Da diese Komponente nur bei einem Hard-Refresh neu aufbaut war sie dafür geeignet. Natürlich würde eine solche Funktionalität in den globalen Store gehören.
+
+Das Menu beinhaltet nebst den verschiedenen Dashboards auch Links zu den weiteren auprogrammierten Bereichen des IMDash. Es soll schlussendlich der Dreh- und Angelpunkt im System werden.
+
+### Presenation (PDF)
+Die mit Abstand grösste Komponente ist die Präsentationsansicht. Wie bei den anderen 
+
+### Übungen
 
 
 # Technlologien
@@ -89,6 +118,8 @@ Im Verlaufe der Entwicklung haben wir unseren Code mehrfach umstellen müssen. D
 -- Dieses Framework ist oben aufgelistet und wurde auch verwendet, jedoch nur an ein paar Stellen wo es für uns keine andere Möglichkeit gab. Eigentlich darf man mit Vue.js kein jQuery verwenden, da beide Frameworks einen virtual-DOM aufbauen uns sich so gegenseitig durcheinander bringen. Da wir ohne Webpack arbeiteten, waren z.B. die sweet-modals nicht via Vue-Instanz aufrufbar, jedoch via jQuery. Ebenfalls für das Frontend haben wir ein paar jQuer Funktionen verwendet.
 - [Firebase](https://firebase.google.com/)
 -- Da wir am Anfang mit CodeIgniter gearbeitet haben, war eine MySQL-Datenbank viel näher. Beim Umstieg auf eine komplette SPA war der Moment schon vorbei, auf Firebase umzusteigen, da schon eine gute Datenbasis in der MySQL-Datenbank vorhanden war.
+- [interact.js](http://interactjs.io/)
+-- Zuerst wollten wir mit interact.js die Kachelanordnung selber machen. Jedoch merkten wir schnell, dass eine Kollisionserkennung sowie das ganze Drag'n'Drop (auch im Bezug auf Mobile-friendlyness) nicht einfach war. Kurz vor dem Aufgeben haben wir dann aber auf Open Source-Grid-Systeme zurückgegriffen ;) .
 
 # Herausforderungen
 
@@ -103,6 +134,7 @@ Im verlaufe unseres Projekts gab es viele Herausforderungen, mit denen wir uns k
 - **CSS** Wir bauten für uns mehrere kleine Librarys für divere Stylefunktionen (Modalfenster, Kacheln, ...). Diese hatten wir mit zu wenig system konzipiert, denn am Schluss mussten wir diverse Workarounds bauen, damit diese sich nicht in die quere kamen. Ein Klassen-Prefix und nach dem System von BEM hätte uns viel Zeit erspart.
 - **Falsche Technologien** Dieser Punkt wurde im Kapitel "Abgesetzte Technologien" thematisiert. Das Problem dabei war, dass wir uns für Technologien entschieden, denen wir falsche Fähigkeiten zugetraut haben oder für gewisse Features die falschen waren.
 - **PDF.js** Diese Library wurde von Mozilla entwickelt und ist Open Source. Diese Render-Engine wird auch im Browser "Firefox" verwendet, um PDFs anzuzeigen. Leider ist sie aber sehr, sehr umfangreich und kann sehr viele Funktionen. Daher mussten wir die Engine so nutzen, damit wir in Vue unsere PDF-Seiten anzeigen können. Wir mussten diese Nutzen, da z.B. Links innerhalb des PDFs von anderen Engines gar nicht erkannt werden. Doch einen PDF-Viewer zu progrmmieren ist fast schon ein eigenes Semesterprojekt.
+- **Komponenten** Die ganze komponentenbasierte Arbeitsweise und Denken kannten wir bis anhin nicht. Darum sind unsere Komponenten auch viel zu gross. Wir haben teilweise viel zu viel Code in eine Komponente verpackt. Es hätte eine viel klarere Struktur gegeben, wenn wir mehr Komponenten gemacht hätten, diese in Unterordner verschachtelt und mit einem Paket-Manager (webpack) eingebunden hätten.
 
 
 # Potentielle Weiterentwicklung

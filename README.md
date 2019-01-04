@@ -112,11 +112,10 @@ Im verlaufe unseres Projekts gab es viele Herausforderungen, mit denen wir uns k
 - **PDF.js** Diese Library wurde von Mozilla entwickelt und ist Open Source. Diese Render-Engine wird auch im Browser "Firefox" verwendet, um PDFs anzuzeigen. Leider ist sie aber sehr, sehr umfangreich und kann sehr viele Funktionen. Daher mussten wir die Engine so nutzen, damit wir in Vue unsere PDF-Seiten anzeigen können. Wir mussten diese Nutzen, da z.B. Links innerhalb des PDFs von anderen Engines gar nicht erkannt werden. Doch einen PDF-Viewer zu progrmmieren ist fast schon ein eigenes Semesterprojekt.
 
 
-
-
 # Potentielle Weiterentwicklung
 
-
+Wir glauben, dass das IMDash eine Zukunft haben könnte. Doch sicher nicht in dieser Form wie wir sie Programmiert haben, denn sonst wird es eine Katastrophe. Aus unseren Learnings denken wir, könnte man eine coole, sinnvolle Plattform für den IM-Unterricht produzieren. Die Gefahr dabei ist aber ganz klar, dass es dem Moodle eine Konkurrenz macht. Ebenso aus Sicht für den Studierende ist es nicht viel besser, einfach nochmals eine weitere Plattform nutzen zu müssen. Eine Lösung dazu könnte sein, dass das IMDash zu einem Moodle-Theme umfunktioniert wird und somit einen Teil von Moodle wird (Sowie auch die Funktionalitäten der Prüfungen usw. eingepflegt wurden).
+Eines steht fest, die Entwicklung "von scratch" ist wahrscheinlich nicht sehr wirtschaftlich. Auch angesichts der Konkurrenz zu bestehenden Produkten. Aber mit dieser Idee eine Integration z.B. in Moodle zu machen könnte aus unserer Sicht eine Zukunft sein.
 
 ### Dev-Tools
 Für die Entwicklung mit Vue.js haben wir die Vue Devtools verwendet. Die Electron-App kann mit ``npm install -g @vue/devtools`` installiert und mit dem Kommando ``vue-devtools`` ausgeführt werden.

@@ -12,7 +12,7 @@ Dieses Tool wurde während der Major-Ausbildung im Studiengang Multimedia Produc
 Das Projekt hat einen insgesamten Wert von 8 ECTS von zwei Studierenden.
 
 <p align="center" style="width: 100%; align: left;">
-  <img alt="Prototyp des IMDash" src="img/IMDash.png" style="width: 80%;" class="imageShadow">
+  <img alt="Prototyp des IMDash" src="img/IMDash.png" style="width: 80%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);" class="imageShadow">
 </p>
 
 ## Konzept
@@ -25,7 +25,7 @@ Das Projekt hat einen insgesamten Wert von 8 ECTS von zwei Studierenden.
 Das IMDash ist eine Single Page Application (SPA) die komplett in der Laufzeit des lokalen Browsers ausgeführt wird. Die grobe Struktur sieht wiefolgt aus:
 
 <p align="center" style="width: 100%; align: center;">
-  <img alt="Prototyp des IMDash" src="img/structure.png" style="width: 40%;"  class="imageShadow">
+  <img alt="Prototyp des IMDash" src="img/structure.png" style="width: 40%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);"  class="imageShadow">
 </p>
 
 ## Aufbau Applikation
@@ -112,7 +112,3 @@ Eines steht fest, die Entwicklung "von scratch" ist wahrscheinlich nicht sehr wi
 
 ### Dev-Tools
 Für die Entwicklung mit Vue.js haben wir die Vue Devtools verwendet. Die Electron-App kann mit ``npm install -g @vue/devtools`` installiert und mit dem Kommando ``vue-devtools`` ausgeführt werden.
-
-
-
-<style>.imageShadow {box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);}</style>

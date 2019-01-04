@@ -1,8 +1,8 @@
-<style rel="stylesheet">
+<p><style rel="stylesheet">
   .imageShadow {
     box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);
   }
-</style>
+</style></p>
 
 # IMDash
 > Das IMDash ist eine ergänzende E-Learning Plattform zu Moodle den Unterricht der 'Interaktiven Medien' noch interaktiver zu gestalten.
@@ -34,11 +34,10 @@ Das IMDash ist eine Single Page Application (SPA) die komplett in der Laufzeit d
   <img alt="Prototyp des IMDash" src="img/structure.png" style="width: 40%;"  class="imageShadow">
 </p>
 
-### Aufruf
-Bei einem Aufruf des Tools wird der User mit dem Switch AAI-Login eingeloggt (da dies nur für registrierte Applikationen gedacht ist, haben wir einfach ein Pop-Up mit der Wahl der ID). Anschliessend werden alle Benutzerdaten und das Start-up-Dashboard vom Server geladen. Es wird alles über eine REST-API gefetcht.
+## Aufbau Applikation
 
-### Dashboard
-Die Dashboards bestehen aus einer Grid-Komponente, die alle Kacheln beinhlaten, die der User hinzugefühgt hat.
+
+
 
 # Technlologien
 Das IMDash wurde hauptsächlich in **Javascript** mit dem Single Page Application (SPA) Framework **Vue.js** geschrieben. Die REST-API wurde in **PHP** geschrieben. Die Daten liegen auf einer **MySQL**-Datenbank.

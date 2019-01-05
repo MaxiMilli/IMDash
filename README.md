@@ -61,8 +61,19 @@ Die grösste Komponente ist die Präsentationsansicht. Zuerst wird auch anhand d
 
 Diese Komponente beinhaltet auch das eintragen von Notizten. Das Prinzip ist sipel: Auf einen Klick auf das etwas dunklere Feld wird ein Textfeld angezeigt. Man kann beliebig hineinschreiben. Mit `Shift + Enter` kann man eine neue Zeile einfügen. Mit nur `Enter` wird das Textfeld entfernt und der beinhaltende Text als Paragraph in der Notizenspalte angezeigt. Zeitgleich wird ein Promise abgesetzt, der die Notiz in der Datenbank einträgt. 
 
+Nebst dem einfachen Eintragen ist es auch möglich, verschiedene Notizensätze anzuzeigen. Mit einem Klick auf den Sharing-Button öffnet sich ein Fenster (realisiert mit dem Framework [vue-tippy.js](https://github.com/KABBOUCHI/vue-tippy)), in dem man alle freigegebenen Notizensätze sieht.
+
+In diesem Sharing-Fenster ist es auch möglich, Notizensätze anderen Studierenden freizugeben. Mit einem Klick auf `Senden` wird ein Suchfeld geöffnet, in dem man den Name von gegenüber einträgt. Dieses Suchfeld schlägt bei der ersten Eingabe mögliche Namen vor, an die man den Notizensatz senden könnte. Somit muss man nicht mit E-Mail-Adressen arbeiten. Nach einem Enter wird derjenigen Person der Satz freigegeben.
+
 ### Übungen
-// TODO: 
+Bei den Übungen haben wir etwas mehr mit der Modularisierung gearbeitet, jedoch ist auch dies noch ausbaufähig. Eine Sicht ist es, alle Übungen zu sehen (beinhaltet noch die "Pagination"-Komponente), eine andere ist es die Übungen zu lösen und die letzte die Übung zu bewerten.
+
+Die Übungsübersicht lädt einfach alle Übungen vom Server die es zu lösen gibt. Zudem wird bei der Initialisierung jeder Übung eine Kategorie und somit auch eine Farbe zugeordnet. In dieser Übersicht gibt es auch eine "Empfohlen"-Sektion, in der drei Übungen vorgeschlagen werden, die für den jeweiligen User gerade aktuell wären. Jedoch haben wir keine solche Form der Artificial Intelligence eingebaut, sondern einfach eine zufällige Abfrage.
+
+Beim Übungen lösen wird zu beginn dass erwartete Resultat angzeigt. Ebenfalls wird eine Übungsbeschreibung geliefert. Hat man die Übung verstanden kann man sie versuchen zu lösen. Dadruch öffnet sich ein Modalfenster und darin ist einen Pen von Codepen.io. Wenn man die Übung abgeschlossen hat, wird der Code von Codepen heruntergeladen und in der IMDash-Datenbank gespeichert.
+
+Nach dem Abschluss der Übung wird der User zur Bewertung weitergeleitet, wo er für die Schwierigkeit ein Rating abgeben kann.
+
 
 ## Semantische Programmierung
 Während der Programmierung versuchten wir, möglichst eindeutige und verständliche Variabel- und Funktionsnamen zu verwenden. Wo nötig haben wir auch den Code kommentiert.
@@ -125,6 +136,9 @@ Im Verlaufe der Entwicklung haben wir unseren Code mehrfach umstellen müssen. D
 -- Da wir am Anfang mit CodeIgniter gearbeitet haben, war eine MySQL-Datenbank viel näher. Beim Umstieg auf eine komplette SPA war der Moment schon vorbei, auf Firebase umzusteigen, da schon eine gute Datenbasis in der MySQL-Datenbank vorhanden war.
 - [interact.js](http://interactjs.io/)
 -- Zuerst wollten wir mit interact.js die Kachelanordnung selber machen. Jedoch merkten wir schnell, dass eine Kollisionserkennung sowie das ganze Drag'n'Drop (auch im Bezug auf Mobile-friendlyness) nicht einfach war. Kurz vor dem Aufgeben haben wir dann aber auf Open Source-Grid-Systeme zurückgegriffen ;) .
+- [vue-codemirror.js](https://github.com/surmon-china/vue-codemirror)
+-- Das IMDash wurde so konzipiert, dass darin direkt Code-Übungen gelöst werden können. Dies haben wir zu Beginn (nach langer Recherche welche Technologie die Beste ist) mit dem vue-codemirror.js lösen wollen. Doch nach anfänglicher Implementierung wurde uns bald klar, dass es sehr kompliziert wird, diesen Code auszuführen. Das wäre ein eigenes Semesterprojekt, denn JavaScript innerhalb von JavaScript auszuführen ist nicht ganz ohne. Wir entschieden uns schlussendlich für die relativ offene API von [codepen.io](https://codepen.io/#).
+
 
 # Herausforderungen
 

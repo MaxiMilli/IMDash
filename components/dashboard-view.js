@@ -48,6 +48,19 @@ Vue.component('dashboard-view', {
         this.dashID = this.$root.dashboardID;
         this.tileRender = false;
         this.createDashboardView();
+
+        var filterVal = 'blur(0px)';
+        $('#content').css({
+            'filter': filterVal,
+            'webkitFilter': filterVal,
+            'mozFilter': filterVal,
+            'oFilter': filterVal,
+            'msFilter': filterVal,
+            'transition': 'all 0.5s ease-out',
+            '-webkit-transition': 'all 0.5s ease-out',
+            '-moz-transition': 'all 0.5s ease-out',
+            '-o-transition': 'all 0.5s ease-out'
+        });
     },
     methods: {
         createDashboardView: function () {
@@ -363,9 +376,6 @@ Vue.component('dashboard-view', {
             return exists;
         },
         getThemaData: function (id) {
-            console.log(id);
-            console.log(this.themen);
-            
             for (var them in this.themen) {
                 if (this.themen[them].ID == id) {
                     return this.themen[them];
@@ -376,8 +386,6 @@ Vue.component('dashboard-view', {
 
         },
         isCategory: function(ele, cat) {
-            console.log(ele);
-            console.log(cat);
             if (ele === cat) {
                 return true;
             } else {

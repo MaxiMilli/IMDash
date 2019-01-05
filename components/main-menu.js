@@ -39,6 +39,7 @@ Vue.component('main-menu', {
             }
         },
         closeMenu: function () {
+            alert("close");
             this.active = false;
             // Animation back
             $('.page-menu').animate({
@@ -81,7 +82,8 @@ Vue.component('main-menu', {
         },
         switchDashboard: function () {
             this.$root.userDataLoaded = false;
-
+            console.log("asdf");
+            
         }
     },
     mounted: function () {
@@ -96,9 +98,11 @@ Vue.component('main-menu', {
         }.bind(this));
     },
     watch: {
-        '$route'(to, from) {
+        '$root.dashboardID'(to, from) {
             if (this.active) {
                 this.toggleMenu();
+            } else {
+                this.closeMenu();
             }
         },
     },

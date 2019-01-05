@@ -57,10 +57,15 @@ Das Menu hat im Verlaufe der Zeit das State-Management für das aktuelle Dashboa
 Das Menu beinhaltet nebst den verschiedenen Dashboards auch Links zu den weiteren auprogrammierten Bereichen des IMDash. Es soll schlussendlich der Dreh- und Angelpunkt im System werden.
 
 ### Presenation (PDF)
-Die mit Abstand grösste Komponente ist die Präsentationsansicht. Wie bei den anderen 
+Die grösste Komponente ist die Präsentationsansicht. Zuerst wird auch anhand der ID, welche als Parameter via URL übergeben wird, die Präsentation von der API geladen. Anschliessend wird das PDF-Dokument Seite für Seite gerendert. Die PDF.js Library ist vollständig [Promise-based](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise), weshalb das alles asynchron abläuft. Beim rendern der PDF-Seiten wird zuerst für jede Seite ein Canvas mit fixer Breite erstellt. Anschliessen für jede Seite einen Promise abgesetzt, der aus dem PDF ein Bild bzw. eine Canvas-Oberfläche rechnet. Als Abschluss wird diese Seite dem richtigen Canvas zugewiesen.
+
+Diese Komponente beinhaltet auch das eintragen von Notizten. Das Prinzip ist sipel: Auf einen Klick auf das etwas dunklere Feld wird ein Textfeld angezeigt. Man kann beliebig hineinschreiben. Mit `Shift + Enter` kann man eine neue Zeile einfügen. Mit nur `Enter` wird das Textfeld entfernt und der beinhaltende Text als Paragraph in der Notizenspalte angezeigt. Zeitgleich wird ein Promise abgesetzt, der die Notiz in der Datenbank einträgt. 
 
 ### Übungen
+// TODO: 
 
+## Semantische Programmierung
+Während der Programmierung versuchten wir, möglichst eindeutige und verständliche Variabel- und Funktionsnamen zu verwenden. Wo nötig haben wir auch den Code kommentiert.
 
 # Technlologien
 Das IMDash wurde hauptsächlich in **Javascript** mit dem Single Page Application (SPA) Framework **Vue.js** geschrieben. Die REST-API wurde in **PHP** geschrieben. Die Daten liegen auf einer **MySQL**-Datenbank.

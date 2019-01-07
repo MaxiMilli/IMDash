@@ -134,7 +134,17 @@ Vue.component('presentation-view', {
         },
         backupNotes: function (id) {
             var that = this;
-            this.updateDataPoint({notesID: this.noteset[id].notesID, presentationID: this.$route.params.id, notes: JSON.stringify(this.noteset[id].data), mode: 2});
+
+            console.log(this.noteset[id].notesID);
+
+            this.updateDataPoint2({userID: this.$root.userID, notesID: this.noteset[id].notesID, presentationID: this.$route.params.id, notes: JSON.stringify(this.noteset[id].data), mode: 2}, function (response) {
+                
+                var data = JSON.parse(response.data);
+                console.log(data);
+                
+                that.noteset[id].notesID = data.id;
+                
+            });
         },
         renderPDF: function () {
             // Get PDF-object
@@ -224,6 +234,21 @@ Vue.component('presentation-view', {
                         console.log(error);
                         this.$snotify.error('Leider gab es einen Fehler!');
                     }.bind(this));
+
+                    var o = {
+                        mode: '5',
+                        userID: this.suggestions[0].ID, // target userID
+                        notesID: this.noteset[this.globalNoteEdit].notesID,
+                        visible: 1,
+                        color: 'b3ffcc'
+                    };
+                    console.log(o);
+                    
+                    this.insertDataPoint(o).then(function (response) {
+                        console.log(response);
+                        console.log("Verknüpfung erstellt");
+                        
+                    });
                 } else {
                     alert("falsch");
                 }

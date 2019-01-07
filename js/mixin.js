@@ -37,7 +37,19 @@ var mixinAPI = {
           console.log(paramObject);
       });
     },
-
+    updateDataPoint2: function (paramObject, cb) {
+      const params = new URLSearchParams();
+      for (var key in paramObject){
+        params.append(key, paramObject[key]);
+      }
+      axios.post(this.getAPIURL() + '/update.php', params).then( function(response) {
+        cb(response);
+      }).catch(function (error) {
+          console.log("ERROR UPDATE Object:");
+          console.log(paramObject);
+      });
+    },
+    // this.insertDataPoint({ mode: '4', userID: String(this.$root.userID), startup: '0'}).then(function (response) { that.getDataPoint('dashboard', 'ID', response.data.dashboardID, false).then(function (response2) { that.userDashboards.push(response2.data[0]); that.addDashboardLoading = false; });});
     insertDataPoint: function (paramObject) {
       return new Promise((resolve) => {
         const params = new URLSearchParams();

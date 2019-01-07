@@ -68,7 +68,7 @@ Vue.component('exercise-solve', {
             });
         },
         placeExercise: function () {
-            
+            alert(document.getElementById("exsolution").contentWindow.location.href)
             // Save code
 
             var invocation = new XMLHttpRequest();
@@ -192,7 +192,7 @@ Vue.component('exercise-solve', {
                                 <button class="btn btn-success float-right" @click="placeExercise">Abgeben</button> 
                         </div>
                         <div class="exercise-body" style="height: 80%;">
-                            <iframe height='265' scrolling='no' title='Deformation' :src="getPenUrl" frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%; height: 80vh'>
+                            <iframe height='265' scrolling='no' title='Deformation' :src="getPenUrl" frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%; height: 80vh' id='exsolution'>
                                 See the Pen <a href='https://codepen.io/Mertl/pen/pxQzWb/'>Deformation</a> by Michal (<a href='https://codepen.io/Mertl'>@Mertl</a>) on <a href='https://codepen.io'>CodePen</a>.
                             </iframe>
                         </div>

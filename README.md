@@ -4,6 +4,8 @@
 **Status:**
 - Prototyp
 
+[Demo](http://862341-7.web1.fh-htwchur.ch/vue/index.html)
+
 Diese Dokumentation reisst das Konzept, die technische Beschreibung, die verwendeten Technologien, die Herausforderungen und die potentielle Weiterentwicklung an. (Zugangsdaten werden per Mail verschickt)
 
 ## Rahmenbedingungen

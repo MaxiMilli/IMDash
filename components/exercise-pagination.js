@@ -1,17 +1,17 @@
 Vue.component('exercise-pagination', {
-    props:{
-        listData:{
-            type:Array,
-            required:true
+    props: {
+        listData: {
+            type: Array,
+            required: true
         },
-        categoryList:{
-            type:Array,
-            required:true
-          },
-        size:{
-          type:Number,
-          required:false,
-          default: 10
+        categoryList: {
+            type: Array,
+            required: true
+        },
+        size: {
+            type: Number,
+            required: false,
+            default: 10
         }
     },
     data: function () {
@@ -25,44 +25,46 @@ Vue.component('exercise-pagination', {
         this.pageCountNumber = Math.floor(l/s);
     },
     methods: {
-        nextPage(){
+        nextPage() {
             this.pageNumber++;
         },
-        prevPage(){
-           this.pageNumber--;
+        prevPage() {
+            this.pageNumber--;
         },
-        setPage(number){
+        setPage(number) {
             this.pageNumber = number;
         },
         getCategoryColor: function (categoryID) {
             var colo = "";
             this.categoryList.forEach((cat, key) => {
                 if (cat.ID === categoryID) {
-                    colo =  this.categoryList[key].color;
+                    colo = this.categoryList[key].color;
                 }
             });
 
             return colo;
         },
         activeNumber(page) {
-            if (page === this.pageNumber){
-                return { 'background-color': '#dddddd'}
+            if (page === this.pageNumber) {
+                return {
+                    'background-color': '#dddddd'
+                }
             }
         }
     },
     computed: {
-        paginatedData(){
+        paginatedData() {
             const start = this.pageNumber * this.size,
-                  end = start + this.size;
-        
-             return this.listData.slice(start, end);
+                end = start + this.size;
+
+            return this.listData.slice(start, end);
         }
     },
     watch: {
         listData: function () {
             let l = this.listData.length + 1,
                 s = this.size;
-            this.pageCountNumber = Math.floor(l/s);
+            this.pageCountNumber = Math.floor(l / s);
             if (this.pageCountNumber == 0) {
                 this.pageCountNumber = 1;
             }
@@ -96,7 +98,7 @@ Vue.component('exercise-pagination', {
             <div class=" tile-excercise-level">
                 <p>Level {{ exercise.level }}</p>
             </div>
-            <router-link class="btn tile-exercise-button" :to="{ path: '/exercise/solve/' + exercise.ID}">
+            <router-link class="btn tile-exercise-button" :to="{ path: '/exercise/solve/' + exercise.ID}" :style="{ 'background-color': getCategoryColor(exercise.category)}">
                 <p>Übung lösen</p>
             </router-link>
         </div>

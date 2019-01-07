@@ -110,7 +110,7 @@ Vue.component('exercise-overview', {
                     <div class=" tile-excercise-level">
                         <p>Level {{ exercise.level }}</p>
                     </div>
-                    <router-link :to="{ path: '/exercise/solve/' + exercise.ID}" class="btn tile-exercise-button">
+                    <router-link :to="{ path: '/exercise/solve/' + exercise.ID}" class="btn tile-exercise-button" :style="{ 'background-color': getCategoryColor(exercise.category)}">
                         <p>Übung lösen</p>
                     </router-link>
                 </div>

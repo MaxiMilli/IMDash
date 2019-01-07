@@ -28,7 +28,10 @@ Vue.component('tile-calendar', {
             this.$emit('delete-tile', this.data.ID);
         },
         openCalendar: function () {
-            //Hier ein neues Modal öffnen und mit entsprechendem i-frame abfüllen, damit Kalender (analog zu Moodle) angezeigt wird.
+            $.sweetModal({
+                title: 'Kalender',
+                content: '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=600&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=75nst629kqef7qd2t9m33verns%40group.calendar.google.com&amp;color=%23875509&amp;ctz=Europe%2FZurich" style="border-width:0" scrolling="no" frameborder="0" height="600" width="100%"></iframe>'
+            });
         }
     },
     watch: {

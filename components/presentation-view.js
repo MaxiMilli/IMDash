@@ -209,7 +209,7 @@ Vue.component('presentation-view', {
                     this.noteset[id].sendActive = false;
                     const params = new URLSearchParams();
                     params.append('mode', 1);
-                    params.append('id', this.$root.userID);
+                    params.append('id', this.suggestions[0].ID);
                     params.append('title', "Notizensatz freigegeben");
                     params.append('body', "Dir wurde einen Notizensatz freigegeben. Schaue ihn dir doch an!");
                     params.append('type', "NOTES");
@@ -217,7 +217,7 @@ Vue.component('presentation-view', {
                     axios.post(this.getAPIURL() + '/add.php', params)
                     .then(function (response) {
                         console.log(response);
-                        this.$snotify.success('Der Notizensatz wurde an ' + this.value + ' freigegeben.');
+                        this.$snotify.success('Der Notizensatz wurde an ' + this.suggestions[0].name + ' freigegeben.');
                     }.bind(this))
                     .catch(function (error) {
                         console.log("ERROR - Backup Notes. Message:");

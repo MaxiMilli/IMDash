@@ -2,6 +2,7 @@ Vue.component('notification-button', {
     data: function () {
         return {
             notifications: [],
+            hasNotifications: false
         }
     },
     mixins: [
@@ -13,6 +14,11 @@ Vue.component('notification-button', {
         .then((response) => {
             //console.log(response);
             this.notifications = response.data.notifications;
+            console.log(this.notifications);
+            
+            if (response.data.notifications != undefined) {
+                this.hasNotifications = true;
+            }            
         })
         .catch(function (error) {
             console.log("ERROR - unable to load Notifications:");
@@ -34,6 +40,9 @@ Vue.component('notification-button', {
                         <h5>{{noti.title}}</h5>
                         <p>{{noti.body}}</p>
                     </router-link>
+                </div>
+                <div v-if="!hasNotifications">
+                    Es gibt im Moment keine neuen Benachrichtigungen.
                 </div>
             </div>
         </div>

@@ -27,34 +27,8 @@ Vue.component('tile-link', {
         deleteTile: function () {
             this.$emit('delete-tile', this.data.ID);
         },
-        openPresentation: function (e) {
-            if (this.data.presentations[0] == undefined) {
-                $.sweetModal('Keine Präsentationen vorhanden!');
-            } else {
-                this.$router.push('/presentation/' + this.data.presentations[0].ID);
-                console.log(this.data.presentations[0].ID);
-            }
-        },
-        openFolder: function (e) {
-            if (this.data.file[0] == undefined) {
-                $.sweetModal('Keine Dateien vorhanden!');
-            } else {
-                var file_path = this.data.file[0].link;
-                var a = document.createElement('A');
-                a.href = file_path;
-                a.download = file_path.substr(file_path.lastIndexOf('/') + 1);
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            }
-        },
-        openStream: function (e) {
-            if (this.data.stream[0] == undefined) {
-                $.sweetModal('Keinen Stream vorhanden!');
-            } else {
-                var win = window.open(this.data.stream[0].link, '_blank');
-                win.focus();
-            }
+        openLink: function () {
+            //Hier den entsprechenden Link von der Datenbank holen und in einem neuen Tab öffnen.
         }
     },
     watch: {
@@ -77,14 +51,8 @@ Vue.component('tile-link', {
             <img id="thema-title-image" :src="data.bild">
         </div>
         <div class="tile-buttons">
-            <div @click="openPresentation" class=" tile-button-link tile-b-l-radius" v-bind:style="colorSecundary">
-                <i class="material-icons tile-button-link-icon">tv</i>
-            </div>
-            <div @click="openFolder" v-bind:style="colorSecundary" class="tile-button-link">
-                <i class="material-icons tile-button-link-icon">folder_open</i>
-            </div>
-            <div @click="openStream" v-bind:style="colorSecundary" class="tile-button-link tile-b-r-radius">
-                <i class="material-icons tile-button-link-icon">tap_and_play</i>
+            <div @click="openLink" class=" tile-button-link tile-b-l-radius tile-b-r-radius" id="tile-solo" v-bind:style="colorSecundary">
+                <p>Link öffnen</p>
             </div>
         </div>
         <div class="tile-info">

@@ -293,6 +293,7 @@ BODY:       tile-body
     height: 100%;
     width: 70%;
     z-index: 2;
+    cursor: pointer;
 }
 
 .tile-button-link {
@@ -324,6 +325,10 @@ BODY:       tile-body
 
 .tile-b-r-radius {
     border-bottom-right-radius: 30px;
+}
+
+#tile-solo {
+    width: 100%;
 }
 
 .tile-info {

@@ -32,7 +32,7 @@ Vue.component('exercise-overview', {
             var colo = "";
             this.categorys.forEach((cat, key) => {
                 if (cat.ID === categoryID) {
-                    colo =  this.categorys[key].color;
+                    colo = this.categorys[key].color;
                 }
             });
 
@@ -55,7 +55,7 @@ Vue.component('exercise-overview', {
         getFeaturedExercises: function () {
             var ret = [];
             this.exercises.forEach(function (exe) {
-                if  (exe.featured == '1'){
+                if (exe.featured == '1') {
                     ret.push(exe);
                 }
             });
@@ -124,6 +124,7 @@ Vue.component('exercise-overview', {
                 </div>
             </div>
 
+<!--
             <div class="row tile-exercise-panel-row">
                 <div class="tile tile20 tile-border--black tile--spacing">
                     <div class="panel tile-border">
@@ -150,6 +151,8 @@ Vue.component('exercise-overview', {
                     </div>
                 </div>
             </div>
+-->
+
 
             <div class="row">
                 <div class="tile-exercise-title">Filtern</div>

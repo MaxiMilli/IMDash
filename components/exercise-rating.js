@@ -5,8 +5,7 @@ Vue.component('exercise-rating', {
         }
     },
     methods: {
-        toggleMenu: function () {
-        },
+        toggleMenu: function () {},
     },
     watch: {
         exerciseRating: function () {
@@ -32,10 +31,10 @@ Vue.component('exercise-rating', {
                 <div class="col-12">
                     <div class="panel tile-border--gold">
                         <div class="tile-head">
-                            Rating
+                            Bewertung der Schwierigkeit
                         </div>
                         <div class="tile-body column">
-                            <p>Bitte bewerte die Schwierigkeit der Übung. War die Übung schwierig?</p>
+                            <p>Wie schwierig war die Aufgabe? (1 = sehr einfach / 5 = sehr schwierig)</p>
                             <star-rating v-model="exerciseRating"></star-rating>
                             <br>
                             <br>

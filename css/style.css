@@ -106,6 +106,7 @@ a:active {
 .title-button:hover {
     text-decoration: none;
     color: #000000;
+    background-color: goldenrod;
 }
 
 /* ---------------- GRID ---------------- */
@@ -188,7 +189,7 @@ a:active {
 
 .page-menu-list-item:hover {
     width: 100%;
-    background-color: #cccf1f;
+    background-color: goldenrod;
     border-radius: 10px;
     vertical-align: middle;
     color: #000000;

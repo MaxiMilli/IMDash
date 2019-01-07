@@ -113,13 +113,13 @@ Vue.component('main-menu', {
             </button>
 
 
-            <!-- SUCHFELD (ausgeblendet)
-            <div class="search-circle" :class="{ 'circle-extendet': searchOpen }">
+            
+            <div class="search-circle" :class="{ 'circle-extendet': searchOpen }" v-if="!active">
                 <i v-if="searchOpen" class="material-icons search-icon" @click="searchOpen = !searchOpen">arrow_back</i>
                 <i v-else class="material-icons search-icon" @click="searchOpen = !searchOpen">search</i>
                 <input v-if="searchOpen" type="text" placeholder="Suche" class="search-form" @keyup.enter="searchDash" v-model="searchText" v-focus v-select>
             </div>
-            -->
+            
 
 
         </div>

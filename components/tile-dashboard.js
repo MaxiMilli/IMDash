@@ -27,8 +27,8 @@ Vue.component('tile-dashboard', {
         deleteTile: function () {
             this.$emit('delete-tile', this.data.ID);
         },
-        openDashboard: function () {
-            //Hier Link zu entsprechendem Dashboard holen und dann weiterleiten.
+        openDashboard: function (id) {
+            router.push({ path: '/' + id })
         }
     },
     watch: {
@@ -51,7 +51,7 @@ Vue.component('tile-dashboard', {
             <img id="thema-title-image" :src="data.bild">
         </div>
         <div class="tile-buttons">
-            <div @click="openDashboard" class=" tile-button-link tile-b-l-radius tile-b-r-radius" id="tile-solo" v-bind:style="colorSecundary">
+            <div @click="openDashboard(data.info)" class=" tile-button-link tile-b-l-radius tile-b-r-radius" id="tile-solo" v-bind:style="colorSecundary">
                 <p>Dashboard öffnen</p>
             </div>
         </div>

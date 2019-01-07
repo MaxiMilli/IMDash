@@ -27,8 +27,9 @@ Vue.component('tile-link', {
         deleteTile: function () {
             this.$emit('delete-tile', this.data.ID);
         },
-        openLink: function () {
-            //Hier den entsprechenden Link von der Datenbank holen und in einem neuen Tab öffnen.
+        openLink: function (url) {
+            var win = window.open(url, '_blank');
+            win.focus();
         }
     },
     watch: {
@@ -51,7 +52,7 @@ Vue.component('tile-link', {
             <img id="thema-title-image" :src="data.bild">
         </div>
         <div class="tile-buttons">
-            <div @click="openLink" class=" tile-button-link tile-b-l-radius tile-b-r-radius" id="tile-solo" v-bind:style="colorSecundary">
+            <div @click="openLink(data.info)" class=" tile-button-link tile-b-l-radius tile-b-r-radius" id="tile-solo" v-bind:style="colorSecundary">
                 <p>Link öffnen</p>
             </div>
         </div>

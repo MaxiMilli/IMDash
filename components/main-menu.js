@@ -81,8 +81,6 @@ Vue.component('main-menu', {
         },
         switchDashboard: function () {
             this.$root.userDataLoaded = false;
-            console.log("asdf");
-
         }
     },
     mounted: function () {
@@ -142,17 +140,17 @@ Vue.component('main-menu', {
             <hr class="page-menu-hr">
             <div class="page-menu-title">Üben</div>
             <div class="page-menu-list-container">
-                <router-link :to="{path: '/exercises/overview'}" class="page-menu-list-item">
+                <router-link :to="{path: '/exercises/overview'}" class="page-menu-list-item" @click="toggleMenu">
                     Alle Übungen
                 </router-link>
             </div>
-            <hr class="page-menu-hr">
+            <!--<hr class="page-menu-hr">
 
             <div class="page-menu-list-container">
                 <router-link to="/presentation/1" class="page-menu-list-item">
                     Presentation
                 </router-link>
-            </div>
+            </div>-->
         </div>
         <div class="page-menu-overlay" v-on:click="toggleMenu">
             &nbsp;

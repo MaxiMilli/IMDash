@@ -21,8 +21,7 @@ Vue.component('exercise-pagination', {
         }
     },
     mounted: function () {
-        let l = this.listData.length + 1,
-                s = this.size;
+        let l = this.listData.length + 1, s = this.size;
         this.pageCountNumber = Math.floor(l/s);
     },
     methods: {

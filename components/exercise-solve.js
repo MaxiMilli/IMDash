@@ -68,7 +68,6 @@ Vue.component('exercise-solve', {
             });
         },
         placeExercise: function () {
-            alert(document.getElementById("exsolution").contentWindow.location.href)
             // Save code
 
             var invocation = new XMLHttpRequest();

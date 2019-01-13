@@ -1,5 +1,5 @@
 # IMDash
-> Das IMDash ist eine ergänzende E-Learning Plattform zu Moodle den Unterricht der 'Interaktiven Medien' noch interaktiver zu gestalten.
+> Das IMDash ist eine ergänzende E-Learning Plattform zu Moodle, welche den Unterricht der 'Interaktiven Medien' noch interaktiver gestalten soll.
 
 **Status:**
 - Prototyp
@@ -18,20 +18,21 @@ Das Projekt hat einen insgesamten Wert von 8 ECTS von zwei Studierenden.
 </p>
 
 ## Konzept
-> Das IMDash soll eine ergänzende Plattform zu Moodle darstellen, die MMP Studierende im IM-Unterricht unterstützen soll.
+> Das IMDash ist eine E-Learningplattform für MMP-Studierende, auf welcher alle Informationen, Übungen und Scripte zum Modul «Interaktive Medien» zu finden sind.
 
-**Giordi, dein Absatz ;)**
+Die HTW Chur verwendet Moodle als ihr Kursmanagementsystem über welches die Studierenden die Unterrichtsunterlagen beziehen können. Für ein Modul bei welchem lediglich einige wenige PDF’s abgelegt werden müssen, eignet sich Moodle ideal. Für ein Grundmodul wie «Interaktive Medien», bei welchem sich jedes Semester eine Vielzahl an Dateien und Dateitypen ansammelt, ist die Plattform allerdings weniger geeignet. Das IMDash soll eine ergänzende Plattform zu Moodle darstellen, die MMP Studierende im IM-Unterricht unterstützen soll. Moodle ist lediglich eine Distributionsplattform ohne interaktive Elemente.
+Das IMDash soll dieses Problem lösen, indem sich die Funktionen ausschliesslich den Bedürfnissen des Moduls Interaktive Medien anpassen. Kern des IMDashs ist die Darstellung in Form eines Dashboards, welches von jedem User an die eigenen Wünsche individuell angepasst werden kann.
 
 # Technische Beschreibung
 
-Das IMDash ist eine Single Page Application (SPA) die komplett in der Laufzeit des lokalen Browsers ausgeführt wird. Die grobe Struktur sieht wiefolgt aus:
+Das IMDash ist eine Single Page Application (SPA) die komplett in der Laufzeit des lokalen Browsers ausgeführt wird. Die grobe Struktur sieht wie folgt aus:
 
 <p align="center" style="width: 100%; align: center;">
   <img alt="Prototyp des IMDash" src="img/structure.png" style="width: 40%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);">
 </p>
 
 ## Aufbau Applikation
-In Vue.js wird mit Komponenten Code modularisiert. Um einen Überblick zu haben, wie die einzelnen Komponenten aufeinander aufbauen haben wir das in einer Grafik visualisiert:
+In Vue.js wird mit Komponenten Code modularisiert. Um einen Überblick zu haben, wie die einzelnen Komponenten aufeinander aufbauen, haben wir das in einer Grafik visualisiert:
 
 <p align="center" style="width: 100%; align: center;">
   <img alt="Prototyp des IMDash" src="img/aufbau.png" style="width: 80%; box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.3);">
@@ -47,7 +48,7 @@ Diese Komponente hat mehrere Funktionen (was wir im Nachhinein gerne verhindert 
 - Responsive Grid anzeigen
 - Kachel einbinden
 
-Beim Aufruf werden verschiedenste Abfragen zum Server gestartet: Es wird das aktuelle Layout, die einzelnen Kacheln für das Dashboard und alle Daten für das Hinzufügen einer Kachel (also alle möglichen Kacheln) geladen. Anschliessend wird das Raster initialisiert, sobald diese alle Abfragen zurückgekommen sind (mit einem Watcher). Sobald das Flag gesetzt wird wird der ganze Inhalt gerendert.
+Beim Aufruf werden verschiedenste Abfragen zum Server gestartet: Es wird das aktuelle Layout, die einzelnen Kacheln für das Dashboard und alle Daten für das Hinzufügen einer Kachel (also alle möglichen Kacheln) geladen. Anschliessend wird das Raster initialisiert, sobald alle Abfragen zurückgekommen sind (mit einem Watcher). Sobald das Flag gesetzt wird, wird der ganze Inhalt gerendert.
 
 > Das Modalfenster wird global geladen und nicht beim Dashboard-Aufruf. Es ist theoretisch auf jeder Seite aufrufbar.
 
@@ -56,7 +57,7 @@ Diese Komponente verfügt noch über weitere Funktionen wie das neu Anordnen der
 ### Menu
 Das Menu hat im Verlaufe der Zeit das State-Management für das aktuelle Dashboard übernommen. Da diese Komponente nur bei einem Hard-Refresh neu aufbaut war sie dafür geeignet. Natürlich würde eine solche Funktionalität in den globalen Store gehören.
 
-Das Menu beinhaltet nebst den verschiedenen Dashboards auch Links zu den weiteren auprogrammierten Bereichen des IMDash. Es soll schlussendlich der Dreh- und Angelpunkt im System werden.
+Das Menu beinhaltet nebst den verschiedenen Dashboards auch Links zu den weiteren ausprogrammierten Bereichen des IMDash. Es soll schlussendlich der Dreh- und Angelpunkt im System werden.
 
 ### Presenation (PDF)
 Die grösste Komponente ist die Präsentationsansicht. Zuerst wird auch anhand der ID, welche als Parameter via URL übergeben wird, die Präsentation von der API geladen. Anschliessend wird das PDF-Dokument Seite für Seite gerendert. Die PDF.js Library ist vollständig [Promise-based](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise), weshalb das alles asynchron abläuft. Beim rendern der PDF-Seiten wird zuerst für jede Seite ein Canvas mit fixer Breite erstellt. Anschliessen für jede Seite einen Promise abgesetzt, der aus dem PDF ein Bild bzw. eine Canvas-Oberfläche rechnet. Als Abschluss wird diese Seite dem richtigen Canvas zugewiesen.
@@ -164,4 +165,4 @@ Im verlaufe unseres Projekts gab es viele Herausforderungen, mit denen wir uns k
 # Potentielle Weiterentwicklung
 
 Wir glauben, dass das IMDash eine Zukunft haben könnte. Doch sicher nicht in dieser Form wie wir sie Programmiert haben, denn sonst wird es eine Katastrophe. Aus unseren Learnings denken wir, könnte man eine coole, sinnvolle Plattform für den IM-Unterricht produzieren. Die Gefahr dabei ist aber ganz klar, dass es dem Moodle eine Konkurrenz macht. Ebenso aus Sicht für den Studierende ist es nicht viel besser, einfach nochmals eine weitere Plattform nutzen zu müssen. Eine Lösung dazu könnte sein, dass das IMDash zu einem Moodle-Theme umfunktioniert wird und somit einen Teil von Moodle wird (Sowie auch die Funktionalitäten der Prüfungen usw. eingepflegt wurden).
-Eines steht fest, die Entwicklung "von scratch" ist wahrscheinlich nicht sehr wirtschaftlich. Auch angesichts der Konkurrenz zu bestehenden Produkten. Aber mit dieser Idee eine Integration z.B. in Moodle zu machen könnte aus unserer Sicht eine Zukunft sein.
+Eines steht fest, die Entwicklung "von scratch" ist wahrscheinlich nicht sehr wirtschaftlich. Auch angesichts der Konkurrenz zu bestehenden Produkten. Aber mit dieser Idee eine Integration z.B. in Moodle zu machen, könnte aus unserer Sicht eine Zukunft sein.
